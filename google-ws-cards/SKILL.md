@@ -66,6 +66,8 @@ Trigger this skill when the user asks for:
    ```bash
    # Bare card (default — paste straight into UIkit Builder)
    python3 scripts/build.py -i spec.json --pretty > card.json
+   # or positional:
+   python3 scripts/build.py spec.json --pretty > card.json
 
    # Chat message envelope (cardsV2 array)
    python3 scripts/build.py -i spec.json -f message --card-id my-card --pretty
@@ -73,6 +75,8 @@ Trigger this skill when the user asks for:
    # Add-on response (action.navigations[0].pushCard)
    python3 scripts/build.py -i spec.json -f addon --pretty
    ```
+
+   `scripts/validate.py` accepts the same two forms: `python3 scripts/validate.py card.json` or `python3 scripts/validate.py -i card.json`. Piping from stdin also works (`cat card.json | python3 scripts/validate.py`).
 
 5. **Hand back the JSON and the UIkit Builder URL.** Tell the user to paste into <https://addons.gsuite.google.com/uikit/builder>.
 
@@ -150,6 +154,8 @@ python3 scripts/build.py -i spec.json --pretty > card.json
 - `SelectionInput` requires `name`, `type` (`CHECK_BOX` / `RADIO_BUTTON` / `SWITCH` / `DROPDOWN` / `MULTI_SELECT`), and `items` (unless using a dynamic data source).
 - `DateTimePicker.type` ∈ {`DATE_AND_TIME`, `DATE_ONLY`, `TIME_ONLY`}.
 - `Action.function` must be a non-empty string. `parameters` items are `{key, value}` (both strings).
+- **Icons have no color / tint field.** `knownIcon` renders in Google's default color; `materialIcon` supports `fill` / `weight` / `grade` but not a color override. Do not promise "red" or "green" status icons.
+- **`knownIcon` catalog is fixed.** Validator does not enforce the enum. Use only values from the [Google Chat API ref: KnownIcon](https://developers.google.com/workspace/chat/api/reference/rest/v1/cards#knownicon). When unsure, fall back to `materialIcon.name` (Material Symbols names).
 
 ## Reference material
 

@@ -288,9 +288,11 @@ def main(argv: list[str]) -> int:
     p.add_argument("--card-id", help="cardId for message format (auto if omitted)")
     p.add_argument("--pretty", "-p", action="store_true", help="Indent output JSON")
     p.add_argument("--no-validate", action="store_true", help="Skip validation pass")
+    p.add_argument("path", nargs="?", help="Input file (positional alias for --input)")
     args = p.parse_args(argv)
 
-    raw = sys.stdin.read() if not args.input else open(args.input, encoding="utf-8").read()
+    src = args.input or args.path
+    raw = sys.stdin.read() if not src else open(src, encoding="utf-8").read()
     try:
         spec = json.loads(raw)
     except json.JSONDecodeError as e:

@@ -457,9 +457,11 @@ def main(argv: list[str]) -> int:
     p = argparse.ArgumentParser(description="Validate CardsV2 JSON")
     p.add_argument("--input", "-i", help="Input file (default stdin)")
     p.add_argument("--quiet", "-q", action="store_true", help="Suppress 'OK' on success")
+    p.add_argument("path", nargs="?", help="Input file (positional alias for --input)")
     args = p.parse_args(argv)
 
-    raw = sys.stdin.read() if not args.input else open(args.input, encoding="utf-8").read()
+    src = args.input or args.path
+    raw = sys.stdin.read() if not src else open(src, encoding="utf-8").read()
     try:
         obj = json.loads(raw)
     except json.JSONDecodeError as e:
