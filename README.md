@@ -1,34 +1,61 @@
 # Skills
 
-Personal collection of [Agent Skills](https://agentskills.io) — portable, vendor-neutral capabilities for AI agents.
+A personal marketplace of [Agent Skills](https://agentskills.io) — portable, vendor-neutral capabilities for AI coding agents.
 
-Each top-level directory is one skill, structured per the [agentskills.io specification](https://agentskills.io/specification): a `SKILL.md` plus optional `scripts/`, `references/`, and `assets/`.
+Each top-level directory is one skill, structured per the [agentskills.io specification](https://agentskills.io/specification): a `SKILL.md` plus optional `scripts/`, `references/`, `assets/`, and `evals/`.
 
-## Skills
+## Index
 
-| Skill                               | Purpose                                                                                                                                                    |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [google-ws-cards](google-ws-cards/) | Generate and validate Google Chat / Workspace add-on CardsV2 JSON. Drops cleanly into the [UIkit Builder](https://addons.gsuite.google.com/uikit/builder). |
+| Skill                               | Purpose                                                                                                      | Runtime            |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------ |
+| [google-ws-cards](google-ws-cards/) | Generate and validate Google Chat / Workspace add-on CardsV2 JSON. Drops into the Google UIkit Card Builder. | Python 3.9+ stdlib |
 
-## Using these skills
+## Install
 
-Compatible with any agent runtime that supports the agentskills.io standard, including Claude Code, Claude.ai, Gemini CLI, Cursor, OpenCode, and others — see the [full client list](https://agentskills.io/#adoption).
+The default install path is the [`skills`](https://www.npmjs.com/package/skills) CLI.
 
-### Claude Code
-
-Symlink or clone into the discovery path:
+**Install every skill in this repo:**
 
 ```bash
-ln -s "$(pwd)/google-ws-cards" ~/.claude/skills/google-ws-cards
+npx skills add raisedadead/skills
 ```
 
-### Manual invocation
+**Install a single skill:**
 
-Each skill's `SKILL.md` is self-contained — copy the directory into your agent's skills folder.
+```bash
+npx skills add raisedadead/skills -s google-ws-cards
+```
 
-## Validation
+**Target a specific agent** (e.g. Claude Code, Cursor, Gemini CLI, OpenCode):
 
-Every skill in this repo is checked with the official [skills-ref](https://github.com/agentskills/agentskills/tree/main/skills-ref) validator:
+```bash
+npx skills add raisedadead/skills -a claude-code
+```
+
+**Install globally** (user directory, not project):
+
+```bash
+npx skills add raisedadead/skills -g
+```
+
+### Alternative: manual install
+
+Clone or symlink directly into your agent's skill discovery path:
+
+```bash
+git clone https://github.com/raisedadead/skills.git
+ln -s "$(pwd)/skills/google-ws-cards" ~/.claude/skills/google-ws-cards
+```
+
+Each `SKILL.md` is self-contained — copy the directory into any agent's skills folder.
+
+## Compatibility
+
+These skills run on any agent runtime that supports the [Agent Skills standard](https://agentskills.io/#adoption), including Claude Code, Claude.ai, Cursor, Gemini CLI, OpenCode, GitHub Copilot, VS Code, Goose, and [many others](https://agentskills.io/#adoption).
+
+## Validate
+
+Every skill is checked with the official [skills-ref](https://github.com/agentskills/agentskills/tree/main/skills-ref) validator:
 
 ```bash
 skills-ref validate ./google-ws-cards
@@ -36,4 +63,4 @@ skills-ref validate ./google-ws-cards
 
 ## License
 
-MIT — see individual `SKILL.md` for per-skill licensing.
+[MIT](LICENSE) — see individual `SKILL.md` files for per-skill notes.
