@@ -1,0 +1,62 @@
+{
+  "header": { "title": "Create incident" },
+  "sections": [
+    {
+      "widgets": [
+        {
+          "textInput": {
+            "name": "title",
+            "label": "Incident title",
+            "type": "SINGLE_LINE"
+          }
+        },
+        {
+          "selectionInput": {
+            "name": "severity",
+            "label": "Severity",
+            "type": "RADIO_BUTTON",
+            "items": [
+              {
+                "text": "SEV1 \u2014 outage",
+                "value": "sev1",
+                "selected": false
+              },
+              {
+                "text": "SEV2 \u2014 degraded",
+                "value": "sev2",
+                "selected": true
+              },
+              {
+                "text": "SEV3 \u2014 minor",
+                "value": "sev3",
+                "selected": false
+              }
+            ]
+          }
+        },
+        {
+          "selectionInput": {
+            "name": "channel",
+            "label": "Notify channel",
+            "type": "DROPDOWN",
+            "items": [
+              { "text": "#incidents", "value": "incidents", "selected": true },
+              { "text": "#oncall", "value": "oncall", "selected": false }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "fixedFooter": {
+    "primaryButton": {
+      "text": "Create",
+      "type": "FILLED",
+      "onClick": { "action": { "function": "createIncident" } }
+    },
+    "secondaryButton": {
+      "text": "Cancel",
+      "onClick": { "action": { "function": "closeDialog" } }
+    }
+  }
+}

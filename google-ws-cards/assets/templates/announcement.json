@@ -1,0 +1,38 @@
+{
+  "header": {
+    "title": "Quarterly review is open",
+    "subtitle": "Submit by Friday, 5pm",
+    "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png",
+    "imageType": "CIRCLE"
+  },
+  "sections": [
+    {
+      "widgets": [
+        {
+          "textParagraph": {
+            "text": "The Q2 self-review window is now open. Take 15 minutes to capture wins, learnings, and goals before the deadline."
+          }
+        },
+        {
+          "buttonList": {
+            "buttons": [
+              {
+                "text": "Open review",
+                "type": "FILLED",
+                "onClick": {
+                  "openLink": { "url": "https://example.com/review" }
+                }
+              },
+              {
+                "text": "Read guide",
+                "onClick": {
+                  "openLink": { "url": "https://example.com/guide" }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

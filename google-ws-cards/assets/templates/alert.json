@@ -1,0 +1,58 @@
+{
+  "header": {
+    "title": "Deploy failed",
+    "subtitle": "checkout-service @ prod",
+    "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png",
+    "imageType": "SQUARE"
+  },
+  "sections": [
+    {
+      "widgets": [
+        {
+          "decoratedText": {
+            "topLabel": "Job",
+            "text": "deploy-prod #1284",
+            "startIcon": { "knownIcon": "BOOKMARK" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Failure",
+            "text": "ImagePullBackOff in 3/12 pods",
+            "wrapText": true,
+            "startIcon": { "knownIcon": "STAR" }
+          }
+        },
+        {
+          "textParagraph": {
+            "text": "<b>Error</b>: <code>manifest unknown: tag v2.18.4 not found</code>"
+          }
+        },
+        {
+          "buttonList": {
+            "buttons": [
+              {
+                "text": "View logs",
+                "type": "FILLED",
+                "onClick": { "openLink": { "url": "https://example.com/logs" } }
+              },
+              {
+                "text": "Rollback",
+                "onClick": {
+                  "action": {
+                    "function": "rollback",
+                    "parameters": [{ "key": "service", "value": "checkout" }]
+                  }
+                }
+              },
+              {
+                "text": "Acknowledge",
+                "onClick": { "action": { "function": "ack" } }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

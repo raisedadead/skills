@@ -1,0 +1,77 @@
+{
+  "header": {
+    "title": "Approve PR #4821",
+    "subtitle": "alice/checkout-rewrite",
+    "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png",
+    "imageType": "CIRCLE"
+  },
+  "sections": [
+    {
+      "widgets": [
+        {
+          "decoratedText": {
+            "topLabel": "Author",
+            "text": "Alice Chen",
+            "startIcon": { "knownIcon": "PERSON" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Diff",
+            "text": "+842 / -317",
+            "startIcon": { "knownIcon": "DESCRIPTION" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Branch",
+            "text": "alice/checkout-rewrite \u2192 main",
+            "wrapText": true,
+            "startIcon": { "knownIcon": "BOOKMARK" }
+          }
+        },
+        { "divider": {} },
+        {
+          "textInput": {
+            "name": "comment",
+            "label": "Comment (optional)",
+            "type": "MULTIPLE_LINE"
+          }
+        },
+        {
+          "buttonList": {
+            "buttons": [
+              {
+                "text": "Approve",
+                "type": "FILLED",
+                "onClick": {
+                  "action": {
+                    "function": "approvePR",
+                    "parameters": [{ "key": "prId", "value": "4821" }]
+                  }
+                }
+              },
+              {
+                "text": "Request changes",
+                "onClick": {
+                  "action": {
+                    "function": "rejectPR",
+                    "parameters": [{ "key": "prId", "value": "4821" }]
+                  }
+                }
+              },
+              {
+                "text": "Open in browser",
+                "onClick": {
+                  "openLink": {
+                    "url": "https://github.com/example/repo/pull/4821"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

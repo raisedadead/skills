@@ -1,0 +1,67 @@
+{
+  "header": {
+    "title": "Sasha Morgan",
+    "subtitle": "Staff Software Engineer",
+    "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png",
+    "imageType": "CIRCLE"
+  },
+  "sections": [
+    {
+      "widgets": [
+        {
+          "decoratedText": {
+            "topLabel": "Email",
+            "text": "sasha@example.com",
+            "startIcon": { "knownIcon": "EMAIL" },
+            "onClick": {
+              "openLink": {
+                "url": "https://mail.google.com/mail/?view=cm&to=sasha@example.com"
+              }
+            }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Phone",
+            "text": "+1 (555) 010-7788",
+            "startIcon": { "knownIcon": "PHONE" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Location",
+            "text": "Brooklyn, NY",
+            "startIcon": { "knownIcon": "MAP_PIN" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Timezone",
+            "text": "America/New_York (UTC-5)",
+            "startIcon": { "knownIcon": "CLOCK" }
+          }
+        },
+        { "divider": {} },
+        {
+          "buttonList": {
+            "buttons": [
+              {
+                "text": "Message",
+                "type": "FILLED",
+                "onClick": {
+                  "openLink": { "url": "https://chat.google.com/dm/x" }
+                }
+              },
+              {
+                "text": "Schedule",
+                "onClick": {
+                  "openLink": { "url": "https://calendar.google.com/" }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "homeCard",
+  "header": {
+    "title": "Inbox triage",
+    "subtitle": "0 unread \u00b7 3 starred"
+  },
+  "peekCardHeader": {
+    "title": "Inbox triage"
+  },
+  "sections": [
+    {
+      "header": "Quick actions",
+      "widgets": [
+        {
+          "buttonList": {
+            "buttons": [
+              {
+                "text": "Triage starred",
+                "type": "FILLED",
+                "onClick": { "action": { "function": "triageStarred" } }
+              },
+              {
+                "text": "Snooze 1h",
+                "onClick": {
+                  "action": {
+                    "function": "snooze",
+                    "parameters": [{ "key": "minutes", "value": "60" }]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "header": "Recent",
+      "collapsible": true,
+      "uncollapsibleWidgetsCount": 2,
+      "widgets": [
+        {
+          "decoratedText": {
+            "topLabel": "Today 09:14",
+            "text": "Re: design review",
+            "bottomLabel": "alice@example.com",
+            "startIcon": { "knownIcon": "EMAIL" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Today 08:02",
+            "text": "Weekly report",
+            "bottomLabel": "reports@example.com",
+            "startIcon": { "knownIcon": "DESCRIPTION" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Yesterday",
+            "text": "Calendar invite: 1:1",
+            "bottomLabel": "bob@example.com",
+            "startIcon": { "knownIcon": "CLOCK" }
+          }
+        }
+      ]
+    }
+  ],
+  "fixedFooter": {
+    "primaryButton": {
+      "text": "Open in Gmail",
+      "type": "FILLED",
+      "onClick": { "openLink": { "url": "https://mail.google.com/" } }
+    }
+  }
+}

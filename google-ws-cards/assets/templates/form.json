@@ -1,0 +1,72 @@
+{
+  "header": { "title": "File a bug" },
+  "sections": [
+    {
+      "widgets": [
+        {
+          "textInput": {
+            "name": "title",
+            "label": "Title",
+            "type": "SINGLE_LINE",
+            "validation": { "inputType": "TEXT", "characterLimit": 120 }
+          }
+        },
+        {
+          "textInput": {
+            "name": "description",
+            "label": "What happened?",
+            "type": "MULTIPLE_LINE"
+          }
+        },
+        {
+          "selectionInput": {
+            "name": "severity",
+            "label": "Severity",
+            "type": "DROPDOWN",
+            "items": [
+              { "text": "Low", "value": "low", "selected": true },
+              { "text": "Medium", "value": "medium", "selected": false },
+              { "text": "High", "value": "high", "selected": false },
+              { "text": "Critical", "value": "critical", "selected": false }
+            ]
+          }
+        },
+        {
+          "selectionInput": {
+            "name": "components",
+            "label": "Components",
+            "type": "MULTI_SELECT",
+            "items": [
+              { "text": "API", "value": "api", "selected": false },
+              { "text": "Web", "value": "web", "selected": false },
+              { "text": "Mobile", "value": "mobile", "selected": false }
+            ]
+          }
+        },
+        {
+          "dateTimePicker": {
+            "name": "occurredAt",
+            "label": "When did it happen?",
+            "type": "DATE_AND_TIME"
+          }
+        },
+        {
+          "buttonList": {
+            "buttons": [
+              {
+                "text": "Submit",
+                "type": "FILLED",
+                "onClick": {
+                  "action": {
+                    "function": "submitBug",
+                    "loadIndicator": "SPINNER"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

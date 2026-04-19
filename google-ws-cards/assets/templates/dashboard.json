@@ -1,0 +1,98 @@
+{
+  "header": {
+    "title": "System health",
+    "subtitle": "Updated just now"
+  },
+  "sections": [
+    {
+      "header": "Today",
+      "widgets": [
+        {
+          "decoratedText": {
+            "topLabel": "Requests",
+            "text": "1.2M",
+            "bottomLabel": "+8% vs yesterday",
+            "startIcon": { "knownIcon": "INVITE" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "Error rate",
+            "text": "0.04%",
+            "bottomLabel": "within SLO",
+            "startIcon": { "knownIcon": "STAR" }
+          }
+        },
+        {
+          "decoratedText": {
+            "topLabel": "p99 latency",
+            "text": "187ms",
+            "bottomLabel": "regional average",
+            "startIcon": { "knownIcon": "CLOCK" }
+          }
+        }
+      ]
+    },
+    {
+      "header": "Top services",
+      "widgets": [
+        { "divider": {} },
+        {
+          "grid": {
+            "title": "Services",
+            "columnCount": 2,
+            "items": [
+              {
+                "title": "checkout",
+                "subtitle": "healthy",
+                "image": {
+                  "imageUri": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+                }
+              },
+              {
+                "title": "search",
+                "subtitle": "healthy",
+                "image": {
+                  "imageUri": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+                }
+              },
+              {
+                "title": "auth",
+                "subtitle": "degraded",
+                "image": {
+                  "imageUri": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+                }
+              },
+              {
+                "title": "billing",
+                "subtitle": "healthy",
+                "image": {
+                  "imageUri": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "widgets": [
+        {
+          "buttonList": {
+            "buttons": [
+              {
+                "text": "Open dashboard",
+                "type": "FILLED",
+                "onClick": { "openLink": { "url": "https://example.com/dash" } }
+              },
+              {
+                "text": "Acknowledge",
+                "onClick": { "action": { "function": "ack" } }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
