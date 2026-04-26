@@ -1,0 +1,86 @@
+# Audit ledger — Phase <N>
+
+Finding ledger for this phase. One section per finding —
+findings include bugs, regressions, contract violations,
+performance regressions, security issues, capability gaps. The
+per-section `Status:` field drifts; the **Resolution log** at
+the bottom is canonical.
+
+## Status legend
+
+- `[ ]` open — not started.
+- `[x]` closed — fix landed (commit hash + finding-id reference).
+- `[~]` partial — partially landed, awaiting verify.
+- `[?]` investigating — symptom seen, root cause unclear.
+
+## Severity scale
+
+- **P1** — blocks the release. User-visible breakage, data loss, regression on a contracted invariant, security incident.
+- **P2** — blocks the phase. Test or build red, behaviour wrong but not yet user-facing.
+- **P3** — polish. Visible drift, minor a11y, naming, log noise.
+- **P4** — nice-to-have. Defer freely.
+
+---
+
+## B1 — <short title>
+
+Status: `[ ]`
+Severity: P?
+Surface: <component | endpoint | command | module | resource | dataset | model — pick the unit that names where it lives>
+Symptom: <what the operator / user / consumer sees. Include reproduction signal — log line, response body, exit code, screenshot ref, alert ID.>
+
+Hypothesis (ordered, most likely first):
+
+1. <hypothesis>
+2. <hypothesis>
+
+Investigation TODO:
+
+- [ ] Read `<file>`
+- [ ] Run `<command>`
+- [ ] Probe `<area>` (see `references/PROBE-PATTERN.md`)
+
+Fix:
+
+<once known — concrete change, file path, before/after snippet>
+
+---
+
+## B2 — <short title>
+
+Status: `[ ]`
+Severity: P?
+Surface:
+Symptom:
+
+Hypothesis:
+
+1.
+
+Investigation TODO:
+
+- [ ]
+
+Fix:
+
+---
+
+## C1 — capability gap (not a bug)
+
+Status: `[ ]`
+Severity: P?
+Need: <what is missing>
+Why now: <why this phase needs it>
+Sketch: <rough approach>
+
+---
+
+## Resolution log
+
+Append at every phase boundary. This table is canonical — if a
+per-section `Status:` field disagrees with this log, the log wins.
+
+| Finding | Status | Commit | Notes |
+| ------- | ------ | ------ | ----- |
+| B1      |        |        |       |
+| B2      |        |        |       |

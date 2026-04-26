@@ -1,0 +1,58 @@
+# Phase <N> Spec — Covenant + Invariants
+
+Read once at phase start. Re-read on `/compact` recovery.
+
+## Per-task covenant
+
+### Positive (every task does this)
+
+- exactly one commit per task
+- title only; no commit body unless the "why" is non-obvious
+- format: `type(scope): subject (P<N>-Bxx)`
+- types: `feat` / `fix` / `test` / `chore` / `docs` / `refactor` / `perf` / `build` / `ci`
+- scopes: <list project units here — e.g. packages in a monorepo (`uikit`, `docs`), services in a polyrepo (`api`, `worker`, `web`), modules in a library (`auth`, `db`, `core`), or surfaces (`migration`, `infra`, `cli`)>
+- subject in imperative mood, ≤ 50 chars
+- sibling test in `git diff` (TDD gate enforced — see `references/HOOK-RESPONSES.md`)
+- rebaselined goldens included in the same commit when output changes (see `references/OUTPUT-REBASELINE.md`)
+- meta-gate updates in same commit when applicable (see `references/META-GATE.md`)
+
+### Negative (no task ever does this)
+
+- never `git add -A` or `git add .` — explicit paths only
+- never `--no-verify` / `--no-gpg-sign`
+- never `git commit --amend` after publish
+- never HEREDOC in `git commit -m "..."`
+- never backticks in commit messages (PreToolUse pattern matches command substitution)
+- never `git reset --hard` on tracked changes
+- never `git push` (user owns push)
+- never `gh pr create` (user owns PR)
+- never `npm publish` / `changeset publish` / `cargo publish` / `terraform apply` / `kubectl apply` / `dbt run` against prod (user owns release / deploy / apply)
+- never edit `.env` files (read-blocked + write-blocked)
+- never co-author lines (disabled in user settings anyway)
+- never touch parallel-session work — multiple sessions may run; never revert / checkout / discard without confirmation
+
+## Invariants (R-rules)
+
+These hold across the phase. If a task would violate one, file a
+new finding in `AUDIT.md` instead.
+
+Stack-neutral floor (always on):
+
+- **R1** — every changed unit has at least one sibling test in the same commit (TDD gate)
+- **R2** — flaky single test: skip + file a finding, never raise project-wide retry count
+- **R3** — long-running command (>30s wall): always background + ScheduleWakeup, never `sleep` in shell
+- **R4** — formatter reformats after Edit/Write: `Read` again before next Edit on the same file
+- **R5** — TDD gate blocks impl edit without sibling test in `git diff`: write the test first
+- **R6** — meta-gate test counts as the sibling for config / threshold / structural files (see `references/META-GATE.md`)
+- **R7** — output rebaseline never runs before the unbaselined diff is read (see `references/OUTPUT-REBASELINE.md`)
+
+Phase-specific (fill in for this phase):
+
+- **R8** — <invariant: e.g. "all public exports listed in `api-surface.json`">
+- **R9** — <invariant: e.g. "all DB migrations linear, no merge conflicts on serial">
+- **R10** — <invariant: e.g. "all CLI commands have exit-code matrix in fixtures">
+
+## Lens addendum
+
+If a lens is loaded (`.dossier/LENS.md`), its invariants extend
+the R-rules above. Keep numbering contiguous (R8, R9, …).
