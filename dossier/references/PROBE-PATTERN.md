@@ -46,7 +46,7 @@ swallow it. Use the runner's raw / verbose mode:
 | pytest     | `pytest -k _probe_<slug> -s`                                            |
 | bats       | `bats --tap tests/_probe-<slug>.bats`                                   |
 | dbt / SQL  | `psql ... -f _probe-<slug>.sql` (or dbt `compile + run-operation`)      |
-| AWS / k8s  | `bash \_probe-<slug>.sh 2>&1                                            | tee /tmp/probe.txt` |
+| AWS / k8s  | `bash _probe-<slug>.sh 2>&1 \| tee /tmp/probe.txt`                      |
 
 ## Worked examples
 

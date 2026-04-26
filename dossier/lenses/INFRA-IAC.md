@@ -65,4 +65,4 @@ Typical sub-phases for an infra phase:
 - P2 — module work (per-module TDD round = plan-RED → fix → plan-GREEN → freeze)
 - P3 — staging soak + drift verify
 - P4 — rollout plan (per env order, rollback procedure)
-- P5 — operator handoff + changeset (service variant — runbook update)
+- P5 — operator handoff + closeout (runbook export if approved)

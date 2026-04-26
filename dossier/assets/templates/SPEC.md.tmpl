@@ -1,4 +1,6 @@
-# Phase <N> Spec — Covenant + Invariants
+# Phase <PHASE> Spec — Covenant + Invariants
+
+Flavor: `<FLAVOR>`
 
 Read once at phase start. Re-read on `/compact` recovery.
 
@@ -8,7 +10,7 @@ Read once at phase start. Re-read on `/compact` recovery.
 
 - exactly one commit per task
 - title only; no commit body unless the "why" is non-obvious
-- format: `type(scope): subject (P<N>-Bxx)`
+- format: `type(scope): subject (P<PHASE>-Bxx)`
 - types: `feat` / `fix` / `test` / `chore` / `docs` / `refactor` / `perf` / `build` / `ci`
 - scopes: <list project units here — e.g. packages in a monorepo (`uikit`, `docs`), services in a polyrepo (`api`, `worker`, `web`), modules in a library (`auth`, `db`, `core`), or surfaces (`migration`, `infra`, `cli`)>
 - subject in imperative mood, ≤ 50 chars
@@ -27,6 +29,7 @@ Read once at phase start. Re-read on `/compact` recovery.
 - never `git push` (user owns push)
 - never `gh pr create` (user owns PR)
 - never `npm publish` / `changeset publish` / `cargo publish` / `terraform apply` / `kubectl apply` / `dbt run` against prod (user owns release / deploy / apply)
+- never use `.changeset/` for dossier internals — closeout stays under `.scratchpad/dossier/closeout/`
 - never edit `.env` files (read-blocked + write-blocked)
 - never co-author lines (disabled in user settings anyway)
 - never touch parallel-session work — multiple sessions may run; never revert / checkout / discard without confirmation
@@ -40,7 +43,7 @@ Stack-neutral floor (always on):
 
 - **R1** — every changed unit has at least one sibling test in the same commit (TDD gate)
 - **R2** — flaky single test: skip + file a finding, never raise project-wide retry count
-- **R3** — long-running command (>30s wall): always background + ScheduleWakeup, never `sleep` in shell
+- **R3** — long-running command (>30s wall): use the selected runtime adapter, never `sleep` in shell
 - **R4** — formatter reformats after Edit/Write: `Read` again before next Edit on the same file
 - **R5** — TDD gate blocks impl edit without sibling test in `git diff`: write the test first
 - **R6** — meta-gate test counts as the sibling for config / threshold / structural files (see `references/META-GATE.md`)
@@ -54,5 +57,5 @@ Phase-specific (fill in for this phase):
 
 ## Lens addendum
 
-If a lens is loaded (`.dossier/LENS.md`), its invariants extend
+If a lens is loaded (`.scratchpad/dossier/LENS.md`), its invariants extend
 the R-rules above. Keep numbering contiguous (R8, R9, …).

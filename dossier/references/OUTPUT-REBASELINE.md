@@ -108,20 +108,18 @@ Use `git status` to check the blast radius before committing.
 
 ## Long-running rebaselines go background
 
-Any rebaseline > 30s wall clock runs in background. Pacing via
-`ScheduleWakeup`, never `sleep`. See `BG-LOOP.md`.
+Any rebaseline > 30s wall clock uses the selected runtime adapter,
+never shell `sleep`. See `BG-LOOP.md`.
 
 ```
-Bash({
+long_command({
   command: "<rebaseline cmd> 2>&1 | tail -3",
-  description: "Full rebaseline after <fix>",
-  run_in_background: true,
+  description: "Full rebaseline after <fix>"
 })
 
-ScheduleWakeup({
+resume_after_wait({
   delaySeconds: <120-300>,
-  reason: "Rebaseline pacing",
-  prompt: "<<autonomous-loop-dynamic>>",
+  reason: "Rebaseline pacing"
 })
 ```
 

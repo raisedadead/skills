@@ -1,4 +1,4 @@
-# Session handoff — `/compact` recovery procedure
+# Session handoff — compact recovery procedure
 
 When a session crosses `/compact`, the runtime injects a
 structured summary block at the top of the new context. Use it
@@ -20,9 +20,9 @@ A block at the top of context with these keys:
 
 ## What survives the compact (no recovery needed)
 
-- **TaskList state.** Verified: `in_progress` task survives. Pending and completed survive. The whole queue survives.
-- **`.dossier/` and `.changeset/` files on disk.** Compact does not touch the filesystem.
-- **Background commands and ScheduleWakeup.** The runtime tracks these orthogonally.
+- **Runtime task state.** Use the selected adapter's task list. If it is missing, reconstruct it from `PLAN.md`.
+- **`.scratchpad/dossier/` files on disk.** Compact/session loss does not touch the filesystem.
+- **Long commands.** The runtime may track sessions/background commands orthogonally.
 
 ## What does NOT survive
 
@@ -34,9 +34,9 @@ A block at the top of context with these keys:
 In order:
 
 1. **Read the `/compact` summary block** at the top of context (automatic; no tool call).
-2. **`TaskList`** — confirm in-flight task survived. Read its full description.
-3. **Read `.dossier/PLAN.md`** at the phase you were in (use `offset` + `limit` for big files).
-4. **Read `.dossier/AUDIT.md`** for the bug section the in-flight task references.
+2. **`task_list`** — confirm in-flight task survived. Read its full description.
+3. **Read `.scratchpad/dossier/PLAN.md`** at the phase you were in.
+4. **Read `.scratchpad/dossier/AUDIT.md`** for the bug section the in-flight task references.
 5. **`git log --oneline | head -<n>`** — confirm commits mentioned in the summary actually landed.
 6. **`git status --short`** — see uncommitted changes (likely the WIP for the in-flight task).
 7. **Resume the in-flight task** at whatever step its TDD round was on (RED, GREEN, adjacent check, land).
@@ -45,7 +45,7 @@ In order:
 
 These are available but were not needed for prior phase recovery:
 
-- `episodic-memory:search-conversations` — the scratchpad + git log were enough.
+- `episodic-memory:search-conversations` — scratchpad files + git log were enough.
 - Subagent dispatch — solo session.
 - MCP servers — none needed.
 
@@ -60,13 +60,12 @@ Same rhythm as pre-compact:
 
 - On phase boundary: read `PLAN.md` to pick next phase.
 - On task boundary: read `AUDIT.md` section for the bug.
-- In-flight: `TaskList` for visibility.
-- Durable: commit log + `.changeset/` for the phase story.
+- In-flight: `task_list` for visibility.
+- Internal record: commit log + `.scratchpad/dossier/closeout/`.
 
-## When to write a `.changeset/` mid-phase
+## When to write a closeout note mid-phase
 
-Normally you write the changeset only at phase close. But if a
-`/compact` is imminent and there is a multi-phase milestone worth
-narrating, drop a partial `.changeset/<phase>-partial.md` (mark it
-WIP in the body). Removes one piece of context from the recovery
-burden.
+Normally you write closeout only at phase close. But if compact/session
+loss is imminent and there is a multi-phase milestone worth narrating,
+drop a partial `.scratchpad/dossier/closeout/phase-<N>-partial.md`
+(mark it WIP in the body). This reduces recovery burden.

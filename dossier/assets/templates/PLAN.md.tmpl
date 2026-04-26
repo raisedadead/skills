@@ -1,4 +1,6 @@
-# Phase <N> Plan
+# Phase <PHASE> Plan
+
+Flavor: `<FLAVOR>`
 
 ## Locked decisions
 
@@ -8,10 +10,11 @@ mid-phase requires re-baselining the affected sub-phases.
 - Verification harness: <e.g. vitest, pytest, go test, cargo test, bats, terraform validate, dbt test — name the runner(s)>
 - Coverage / quality gate: <e.g. coverage ≥ 85, mutation score ≥ 60, contract tests pass, schema diff clean — pick the floor>
 - Output rebaseline mode (if applicable): <e.g. snapshot per-test vs blanket update; OpenAPI dump vs hand-curated; SQL diff freeze>
-- Issue tracker: <e.g. dossier markdown only / GitHub issues / linear / beads>
-- Per-task covenant: one commit, `type(scope): subject (P<N>-Bxx)` (see `SPEC.md` and `references/COVENANT.md`)
+- Issue tracker: <e.g. scratchpad dossier only / GitHub issues / linear / beads>
+- Per-task covenant: one commit, `type(scope): subject (P<PHASE>-Bxx)` (see `SPEC.md` and `references/COVENANT.md`)
 - Push / PR / publish / deploy: NEVER without explicit user approval.
 - Lens: <web | backend | cli | lib | data | infra | mobile | ml | none>
+- Runtime adapter: <Claude Code | OpenCode | Codex>
 - <other invariants for this phase>
 
 ## Phase index
@@ -70,12 +73,12 @@ Tasks:
 
 ---
 
-## Pn — release / cut
+## Pn — closeout
 
-Goal: changeset + final green.
+Goal: internal closeout + final green.
 Tasks:
 
-- Pn.1 — write `.changeset/phase-<N>-<slug>.md`
+- Pn.1 — write `.scratchpad/dossier/closeout/phase-<PHASE>-<slug>.md`
 - Pn.2 — final coverage / contract / drift sweep
 - Pn.3 — confirm `AUDIT.md` Resolution log current
 - Pn.4 — hand back to user for push / PR / publish / deploy

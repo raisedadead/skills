@@ -1,4 +1,4 @@
-# Hook responses — literal messages + structured replies
+# Claude Code hook responses — literal messages + structured replies
 
 The harness fires hooks during the phase. Here are the literal
 messages we observed and the response pattern that satisfies each.
@@ -126,8 +126,8 @@ Continue the in-flight task.
 **Re-asserts:** caveman mode level, plugin warnings, plus the
 structured summary block (see `HANDOFF.md`).
 
-**Response:** read the summary block, then read `.dossier/`
-docs to reconstruct in-flight context.
+**Response:** read the summary block, then read
+`.scratchpad/dossier/` docs to reconstruct in-flight context.
 
 ## What we did not need but the harness offers
 

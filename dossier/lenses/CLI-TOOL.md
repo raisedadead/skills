@@ -63,4 +63,4 @@ Typical sub-phases for a CLI phase:
 - P2 — subcommand surface freeze (every subcommand has golden)
 - P3 — feature work (per-flag TDD rounds with golden)
 - P4 — completion script generation + golden
-- P5 — release / cut + changeset (package variant if distributed)
+- P5 — release / cut + closeout

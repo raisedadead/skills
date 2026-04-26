@@ -19,44 +19,44 @@ alone.
 | Worktree management             | superpowers | `using-git-worktrees`                                                     |
 | Branch finishing                | superpowers | `finishing-a-development-branch`                                          |
 | TDD doctrine (Iron Law)         | superpowers | prompt-level enforcement                                                  |
-| Phase plan structure            | **dossier** | `.dossier/PLAN.md` (sub-phases, locked decisions, expected commits)       |
-| Bug / finding ledger            | **dossier** | `.dossier/AUDIT.md`                                                       |
-| Per-task covenant               | **dossier** | `.dossier/SPEC.md`                                                        |
+| Phase plan structure            | **dossier** | `.scratchpad/dossier/PLAN.md` (sub-phases, locked decisions, expected commits) |
+| Bug / finding ledger            | **dossier** | `.scratchpad/dossier/AUDIT.md`                                            |
+| Per-task covenant               | **dossier** | `.scratchpad/dossier/SPEC.md`                                             |
 | Sibling-test gate (file system) | **dossier** | PreToolUse TDD-gate hook + `references/COVENANT.md`                       |
 | Commit cadence + format         | **dossier** | one commit per task, `type(scope): subject (P<N>-Bxx)`                    |
 | Output rebaseline 5-step        | **dossier** | `references/OUTPUT-REBASELINE.md`                                         |
 | Meta-gate ratchet               | **dossier** | `references/META-GATE.md`                                                 |
-| ScheduleWakeup pacing           | **dossier** | `references/BG-LOOP.md`                                                   |
+| Runtime wait/resume pacing      | **dossier** | `references/BG-LOOP.md` + `references/RUNTIME-ADAPTERS.md`                |
 | `/compact` recovery             | **dossier** | `references/HANDOFF.md` (recovers work state from disk)                   |
-| Durable changeset               | **dossier** | `.changeset/<slug>.md` (committed)                                        |
+| Internal closeout               | **dossier** | `.scratchpad/dossier/closeout/<slug>.md`                                  |
 | Stack lens                      | **dossier** | `lenses/<stack>.md`                                                       |
 
 The split is clean because superpowers' artefacts are
 **process-shaped** (specs, plans, agent prompts) and dossier's
 artefacts are **state-shaped** (ledger, covenant, frozen
-artefacts, durable record).
+artefacts, internal phase record).
 
 ## How they compose at runtime
 
 1. **Brainstorm** — superpowers `brainstorming` skill writes `docs/superpowers/specs/<date>-<topic>-design.md`.
 2. **Plan author** — superpowers `writing-plans` skill writes `docs/superpowers/plans/<date>-<feature>.md` with checkbox tasks.
 3. **Open dossier** — run `init-dossier.sh --with-superpowers --lens <stack>`. The script:
-   - creates `.dossier/AUDIT.md` and `.dossier/SPEC.md` from templates,
-   - symlinks `.dossier/PLAN.md` → `docs/superpowers/plans/<latest>.md`,
-   - symlinks `.dossier/LENS.md` → `lenses/<stack>.md`.
-4. **Pre-seed ledger** — copy any "open questions" from the brainstorm spec into `.dossier/AUDIT.md` as `B1, B2, …`.
+   - creates `.scratchpad/dossier/AUDIT.md` and `.scratchpad/dossier/SPEC.md` from templates,
+   - symlinks `.scratchpad/dossier/PLAN.md` → `docs/superpowers/plans/<latest>.md`,
+   - symlinks `.scratchpad/dossier/LENS.md` → `lenses/<stack>.md`.
+4. **Pre-seed ledger** — copy any "open questions" from the brainstorm spec into `.scratchpad/dossier/AUDIT.md` as `B1, B2, …`.
 5. **Per-task loop** — for each plan checkbox:
    - dossier per-task covenant: TDD round, sibling test, single commit, format `type(scope): subject (P<N>-Bxx)`.
    - superpowers: when superpowers' subagent prompts say "complete this step", they comply with dossier's covenant naturally — RED-GREEN-COMMIT is a refinement of superpowers' Iron Law.
-6. **Code review** — superpowers `requesting-code-review` runs against the commits dossier produced. Findings flow back into `.dossier/AUDIT.md` as new B-ids if not addressable in-flight.
-7. **Branch finish** — superpowers `finishing-a-development-branch` handles the close. Dossier writes `.changeset/<slug>.md` as the durable record.
-8. **`/compact`** — superpowers re-injects `using-superpowers` (process). Dossier recovers from disk (`.dossier/PLAN.md`, `AUDIT.md`, `git log`, `TaskList`). They don't fight.
+6. **Code review** — superpowers `requesting-code-review` runs against the commits dossier produced. Findings flow back into `.scratchpad/dossier/AUDIT.md` as new B-ids if not addressable in-flight.
+7. **Branch finish** — superpowers `finishing-a-development-branch` handles the branch close. Dossier writes `.scratchpad/dossier/closeout/<slug>.md` as the internal phase record.
+8. **`/compact`** — superpowers re-injects `using-superpowers` (process). Dossier recovers from disk (`.scratchpad/dossier/PLAN.md`, `AUDIT.md`, `git log`, runtime task state). They don't fight.
 
 ## Resolving the plan-doc location
 
 Two options:
 
-- **Symlink (recommended).** `.dossier/PLAN.md` → `docs/superpowers/plans/<file>.md`. One file, two readers. Init script does this with `--with-superpowers`.
+- **Symlink (recommended).** `.scratchpad/dossier/PLAN.md` → `docs/superpowers/plans/<file>.md`. One file, two readers. Init script does this with `--with-superpowers`.
 - **Side-by-side.** Keep both. Superpowers reads its own; dossier reads its own; you keep them in sync manually. Diverges fast — only do this if you need different sub-phase shapes than superpowers' checkbox-list expects.
 
 The symlink works because dossier's `PLAN.md` reader doesn't
@@ -84,7 +84,7 @@ hook enforces it.
 ## Where the doctrines clash (and resolution)
 
 - **Squash vs one-commit-per-task.** Superpowers' `finishing-a-development-branch` sometimes squashes. Dossier wants one commit per task preserved for traceability.
-  - **Resolution.** Squash _across_ tasks within a phase is fine for the merge commit, _but the local branch keeps one commit per task_ until merged. The merge commit message references the changeset entry.
+  - **Resolution.** Squash _across_ tasks within a phase is fine for the merge commit, _but the local branch keeps one commit per task_ until merged. The merge commit message can reference the internal closeout if the user wants.
 - **Plan-doc placeholders.** Superpowers' `writing-plans` may include checkboxes like "[ ] Add X". Dossier's covenant expects a B-id per task.
   - **Resolution.** When converting checkboxes to dossier tasks, assign B-ids on the fly: `[ ] B7: Add X`. Cross-reference in `AUDIT.md`.
 
@@ -99,5 +99,5 @@ If you want to try them together with minimum friction:
 5. Drop into superpowers' execution flow with dossier's covenant active.
 
 You'll notice: superpowers handles the "what" and the "who"
-(plan + dispatch); dossier handles the "how" and the "trail"
-(covenant + ledger + changeset).
+(plan + dispatch); dossier handles the "how" and the internal trail
+(covenant + ledger + closeout).

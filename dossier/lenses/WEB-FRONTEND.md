@@ -61,4 +61,4 @@ Typical sub-phases for a web-frontend phase:
 - P3 — token / chrome polish (CSS gates)
 - P4 — accessibility ratchet (a11y axe-core gate)
 - P5 — coverage threshold ratchet
-- P6 — release / GA cut + changeset
+- P6 — release / GA cut + closeout

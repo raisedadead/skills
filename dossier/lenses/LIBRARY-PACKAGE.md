@@ -13,7 +13,7 @@ semver governs every release.
 ## Specific gates (meta-gate extensions)
 
 - **Public API surface freeze.** `api-surface.json` (or equivalent) committed; CI regenerates and `git diff --exit-code`. Diff → fail. Updates land with the breaking commit.
-- **Semver gate.** Meta-gate inspects the diff: any removed export → reject unless changeset bumps `major`. Any added export → require `minor`. Other → `patch`.
+- **Semver gate.** Meta-gate inspects the diff: any removed export → reject unless release metadata bumps `major`. Any added export → require `minor`. Other → `patch`.
 - **No internal symbol exported.** Walk `index.ts` / `lib.rs` re-exports; meta-gate rejects re-exports of names matching `_*`, `internal*`.
 - **Type-only exports flagged.** TS: meta-gate regex on `export type` vs `export const` to catch accidental runtime export.
 - **No `process.env` reads in library code.** Library shouldn't depend on env; meta-gate greps for offenders (allowlist tests).
@@ -61,4 +61,4 @@ Typical sub-phases for a library phase:
 - P2 — type-test scaffold (`expectTypeOf`, `tsd`, `compile-fail`)
 - P3 — feature work (per-export TDD rounds)
 - P4 — docs regeneration + API reference freeze
-- P5 — semver bump decision + changeset (package variant)
+- P5 — semver bump decision + closeout

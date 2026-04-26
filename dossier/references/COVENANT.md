@@ -1,7 +1,7 @@
 # Per-task covenant
 
 The rules every commit in a phase obeys. Project-tunable in
-`.dossier/SPEC.md`.
+`.scratchpad/dossier/SPEC.md`.
 
 ## Positive — every task does this
 
@@ -15,7 +15,7 @@ The rules every commit in a phase obeys. Project-tunable in
 - **Sibling test in `git diff`.** The PreToolUse TDD gate blocks Edit on impl files when no sibling test is uncommitted in `git diff HEAD`. Write the failing test first.
 - **Rebaselined output included.** When a fix changes any recorded output (snapshots, OpenAPI, goldens, schema dumps, terraform plan baseline), the updated artefact lands in the same commit (see `OUTPUT-REBASELINE.md`).
 - **Meta-gate updates in same commit.** When a structural rule strengthens (coverage threshold, public-API allowlist add, env-var allowlist, terraform deny-list), the meta-test change lands with the impl change.
-- **Update Tasks API.** `TaskUpdate → in_progress` on start, `TaskUpdate → completed` on finish. Survives `/compact`.
+- **Update runtime task state.** Use the selected adapter: `task_start` on start, `task_done` on finish. State must survive or be reconstructable after compact / session loss.
 - **Append to `AUDIT.md` Resolution log at phase boundary.** Per-section `Status:` drifts; the table is canonical.
 
 ## Negative — no task ever does this
@@ -41,7 +41,6 @@ The rules every commit in a phase obeys. Project-tunable in
 ### Web frontend phase tail (PNG rebaseline + tokens)
 
 ```
-b35ad17 chore: changeset for Phase 9 GA hardening (P9-final)
 b15e4a6 test(docs): lock preview spans full card chrome (P9-B2 not-repro)
 09c1657 fix(docs): explicit type=button on .showcase__tab (P9-B14)
 b4e718f fix(docs): swap hex literals in showcase.css for tokens (P9-B13)
@@ -51,7 +50,6 @@ c90490f test(docs): lock tooltip + data-table behavioural contracts (P9-B6)
 ### Backend service phase tail (OpenAPI freeze + migration)
 
 ```
-4f2c811 chore: changeset for Phase 3 idempotency cut (P3-final)
 9a1c33d feat(api): add idempotency_key to POST /v2/orders (P3-B7)
 6d8e2b1 test(api): contract test idempotent retry returns 200 not 409 (P3-B7)
 3b71a04 fix(db): linear migration 0042 — add tier column, default free (P3-B5)
@@ -61,7 +59,6 @@ e217c50 test(db): migration 0042 idempotent on rerun (P3-B5)
 ### CLI tool phase tail (golden stdout + exit codes)
 
 ```
-71b3902 chore: changeset for Phase 2 release (P2-final)
 2c4d1f6 fix(cli): exit 64 on usage error not 1 (P2-B3)
 8e91207 test(cli): golden stdout for `tool init --dry-run` (P2-B2)
 4f01a8a refactor(cli): split flag parser, add no-color sentinel (P2-B1)
@@ -70,7 +67,6 @@ e217c50 test(db): migration 0042 idempotent on rerun (P3-B5)
 ### Library phase tail (public API surface + semver)
 
 ```
-c30aa11 chore: changeset for Phase 4 v2.0 cut (P4-final)
 9f1e2c8 feat(core): rename `compute()` → `evaluate()` — breaking (P4-B9)
 1c4e007 test(core): public API surface frozen at v2.0 (P4-B9)
 3a72f1d fix(auth): null-safe token refresh (P4-B6)
@@ -78,4 +74,6 @@ c30aa11 chore: changeset for Phase 4 v2.0 cut (P4-final)
 
 Pattern across all four: each subject ≤ 50 chars, names the
 surface (`scope`), states an outcome, ends with the P-Bxx tag.
-No bodies. No emoji. Sibling test always in the diff.
+No bodies. No emoji. Sibling test always in the diff. Phase closeout
+is written under `.scratchpad/dossier/closeout/`, not committed as a
+package-manager changeset.

@@ -60,4 +60,4 @@ Typical sub-phases for a backend-API phase:
 - P3 — feature work (per-route TDD rounds)
 - P4 — perf / load gate (p99 floor)
 - P5 — observability — logs / traces / metrics on new routes
-- P6 — release / cut + changeset (service variant)
+- P6 — release / cut + closeout

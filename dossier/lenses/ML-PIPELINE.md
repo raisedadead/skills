@@ -67,4 +67,4 @@ Typical sub-phases for an ML phase:
 - P2 — golden-inference fixture (deterministic samples)
 - P3 — feature work (per-eval TDD rounds — set band → run → land)
 - P4 — perf / latency / cost gate
-- P5 — release / cut + changeset (service variant — describe model swap, latency / cost delta)
+- P5 — release / cut + closeout (describe model swap, latency / cost delta)

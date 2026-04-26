@@ -5,11 +5,11 @@ Stack-specific addons to the core dossier workflow. The core
 the conventions, gates, and footguns of one stack.
 
 Pick at most **one** lens per phase. Symlink it (or copy) into
-`.dossier/LENS.md` so it's always next to the other working
+`.scratchpad/dossier/LENS.md` so it's always next to the other working
 docs.
 
 ```bash
-ln -sfn ../../<skill-dir>/lenses/BACKEND-API.md .dossier/LENS.md
+ln -sfn ../../<skill-dir>/lenses/BACKEND-API.md .scratchpad/dossier/LENS.md
 ```
 
 The init script does this for you when you pass `--lens=<name>`.
@@ -49,7 +49,7 @@ fast:
 ## Mixing stacks (fullstack work)
 
 If the phase legitimately spans two stacks (e.g. backend +
-frontend on a feature), keep one lens primary in `.dossier/LENS.md`
+frontend on a feature), keep one lens primary in `.scratchpad/dossier/LENS.md`
 and reference the other in `PLAN.md`'s locked decisions. Don't
 load both as `LENS.md` — pick the lens that owns the harder
 gates.

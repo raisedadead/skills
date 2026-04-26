@@ -62,4 +62,4 @@ Typical sub-phases for a mobile phase:
 - P2 — dark-mode + Dynamic Type baseline
 - P3 — feature work (per-screen TDD rounds with snapshots)
 - P4 — bundle-size + perf gate
-- P5 — release / cut + changeset (package variant for SDK; service variant for app)
+- P5 — release / cut + closeout

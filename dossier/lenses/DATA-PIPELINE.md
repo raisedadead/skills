@@ -64,4 +64,4 @@ Typical sub-phases for a data-pipeline phase:
 - P2 — incremental model contract (per-model TDD rounds)
 - P3 — backfill scripts + downtime plan
 - P4 — observability (run-time band, alert thresholds)
-- P5 — release / cut + changeset (service variant — operators read this)
+- P5 — release / cut + closeout (operators read this if exported)
