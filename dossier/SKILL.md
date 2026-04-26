@@ -13,7 +13,6 @@ license: MIT
 metadata:
   author: mrugesh
   version: "0.3.0"
-compatibility: Bash 4+ (init script). Markdown templates work in Claude Code, OpenCode, and Codex via runtime adapters. Claude Code gets native TaskCreate / TaskUpdate / TaskList and ScheduleWakeup; other runtimes map the same primitives to their own task and shell/session tools.
 allowed-tools: Bash(git:*) Bash(mkdir:*) Bash(ls:*) Bash(grep:*) Bash(find:*) Bash(sort:*) Bash(head:*) Bash(ln:*) Bash(sed:*) Bash(bash:*) Read Write Edit
 ---
 
@@ -24,6 +23,14 @@ agent-facing plan, audit ledger, covenant, selected lens, and phase
 closeout inside `.scratchpad/dossier/`. It does **not** write to
 `.changeset/`; package-manager changesets and public release notes are
 external artifacts that require explicit user approval.
+
+## Runtime
+
+The init script needs Bash 4+. Markdown templates work in Claude Code,
+OpenCode, and Codex via runtime adapters. Claude Code gets native
+`TaskCreate` / `TaskUpdate` / `TaskList` and `ScheduleWakeup`; other
+runtimes map the same primitives to their own task and shell/session
+tools.
 
 ## When to use
 

@@ -9,7 +9,10 @@ proto contracts, DB migrations, and idempotency / retry concerns.
 - **Output:** OpenAPI / proto spec, JSON response shape, status code, header set, log line, emitted event.
 - **Contract:** OpenAPI `.yaml` / `.proto` / GraphQL schema + status-code matrix + idempotency key + auth scope.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **OpenAPI freeze.** `openapi.v2.yaml` is committed; CI runs `make openapi && git diff --exit-code`. Diff → fail. Update both in same commit.
 - **Migration linearity.** Filenames in `db/migrations/` strictly monotonic; no two migrations claim the same number.
@@ -50,7 +53,7 @@ Goldens: `openapi.v2.yaml`, `proto/*.proto`, `tests/contract/__snapshots__/`.
 - **`SELECT … FOR UPDATE` outside transaction.** Lock released immediately. → integration test with two connections.
 - **Pagination on unsorted query.** Page 2 overlaps page 1. → meta-gate on `LIMIT` without `ORDER BY`.
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for a backend-API phase:
 

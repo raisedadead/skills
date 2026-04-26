@@ -10,7 +10,10 @@ simulator runs, snapshot images, and OS-version drift dominate.
 - **Output:** snapshot image, accessibility tree, navigation stack, native log line.
 - **Contract:** view hierarchy + a11y labels + supported OS range + entitlements / permissions + bundle size.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **A11y label coverage.** Every interactive view has a label / `accessibilityLabel`. Meta-gate walks the view tree (or runs an a11y audit in tests).
 - **Min OS version pinned.** `Info.plist` `LSMinimumSystemVersion` / `minSdk` declared; meta-gate asserts floor.
@@ -53,7 +56,7 @@ Goldens: `__Snapshots__/*.png`, `app/src/test/snapshots/images/*.png`.
 - **Push notification entitlement signed but not used.** App Store rejects. → meta-gate on entitlements vs code use.
 - **Background-mode `audio` left from old feature.** Battery drain warning. → meta-gate on `UIBackgroundModes`.
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for a mobile phase:
 

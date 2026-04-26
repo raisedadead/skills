@@ -10,7 +10,10 @@ form the contract.
 - **Output:** stdout text (golden), stderr text, exit code, side-effect on filesystem / network.
 - **Contract:** flag set + exit-code matrix + stdout shape (plain / JSON / TSV) + `--help` text.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **Exit-code matrix.** Documented and tested: 0=ok, 1=runtime, 2=usage (or 64=usage per `sysexits.h`). Meta-gate parses help text + asserts coverage.
 - **`--help` available on every subcommand.** Walk subcommand tree; assert `--help` exits 0.
@@ -54,7 +57,7 @@ golden, diffs against actual.
 - **Newline at EOF drift.** Editor strips trailing newline from golden; runner emits with newline. → `printf "%s" > golden.txt` not `echo`.
 - **Argv vs flags ambiguity.** `tool foo -v` vs `tool -v foo` — flag library treats positional differently. → freeze in golden.
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for a CLI phase:
 

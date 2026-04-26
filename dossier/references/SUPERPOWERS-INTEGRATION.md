@@ -19,11 +19,11 @@ alone.
 | Worktree management             | superpowers | `using-git-worktrees`                                                     |
 | Branch finishing                | superpowers | `finishing-a-development-branch`                                          |
 | TDD doctrine (Iron Law)         | superpowers | prompt-level enforcement                                                  |
-| Phase plan structure            | **dossier** | `.scratchpad/dossier/PLAN.md` (sub-phases, locked decisions, expected commits) |
+| Phase plan structure            | **dossier** | `.scratchpad/dossier/PLAN.md` phase table + locked decisions              |
 | Bug / finding ledger            | **dossier** | `.scratchpad/dossier/AUDIT.md`                                            |
 | Per-task covenant               | **dossier** | `.scratchpad/dossier/SPEC.md`                                             |
 | Sibling-test gate (file system) | **dossier** | PreToolUse TDD-gate hook + `references/COVENANT.md`                       |
-| Commit cadence + format         | **dossier** | one commit per task, `type(scope): subject (P<N>-Bxx)`                    |
+| Commit cadence + format         | **dossier** | one commit per task, `type(scope): subject (PH<N>-Bxx)`                   |
 | Output rebaseline 5-step        | **dossier** | `references/OUTPUT-REBASELINE.md`                                         |
 | Meta-gate ratchet               | **dossier** | `references/META-GATE.md`                                                 |
 | Runtime wait/resume pacing      | **dossier** | `references/BG-LOOP.md` + `references/RUNTIME-ADAPTERS.md`                |
@@ -46,7 +46,7 @@ artefacts, internal phase record).
    - symlinks `.scratchpad/dossier/LENS.md` → `lenses/<stack>.md`.
 4. **Pre-seed ledger** — copy any "open questions" from the brainstorm spec into `.scratchpad/dossier/AUDIT.md` as `B1, B2, …`.
 5. **Per-task loop** — for each plan checkbox:
-   - dossier per-task covenant: TDD round, sibling test, single commit, format `type(scope): subject (P<N>-Bxx)`.
+   - dossier per-task covenant: TDD round, sibling test, single commit, format `type(scope): subject (PH<N>-Bxx)`.
    - superpowers: when superpowers' subagent prompts say "complete this step", they comply with dossier's covenant naturally — RED-GREEN-COMMIT is a refinement of superpowers' Iron Law.
 6. **Code review** — superpowers `requesting-code-review` runs against the commits dossier produced. Findings flow back into `.scratchpad/dossier/AUDIT.md` as new B-ids if not addressable in-flight.
 7. **Branch finish** — superpowers `finishing-a-development-branch` handles the branch close. Dossier writes `.scratchpad/dossier/closeout/<slug>.md` as the internal phase record.

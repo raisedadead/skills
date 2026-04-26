@@ -67,7 +67,7 @@ rebaseline + commit together**.
 
    ```bash
    git add <source files> <golden files>
-   git commit -m "fix(<scope>): <subject> (P<N>-Bxx)"
+   git commit -m "fix(<scope>): <subject> (PH<N>-Bxx)"
    ```
 
 ## What never happens

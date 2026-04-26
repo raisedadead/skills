@@ -25,7 +25,7 @@ Claude Code hook details live in `HOOK-RESPONSES.md`.
 | `task_start`        | `update_plan` marks exactly one item `in_progress`.                   |
 | `task_done`         | `update_plan` marks the item `completed`.                             |
 | `task_list`         | Read the current `update_plan` state; require no `in_progress` items. |
-| `long_command`      | `exec_command` with PTY/session when useful; poll via `write_stdin`.  |
+| `long_command`      | `exec_command`; poll session id with empty `write_stdin`.             |
 | `resume_after_wait` | No scheduler. Keep session alive, continue polling, or report block.  |
 | `handoff_summary`   | Conversation summary + git state + `.scratchpad/dossier/` files.      |
 
@@ -37,13 +37,16 @@ destructive operations.
 
 | Primitive           | Mapping                                                                  |
 | ------------------- | ------------------------------------------------------------------------ |
-| `task_create`       | Native todo/task list entry per planned commit.                          |
-| `task_start`        | Mark the active todo/task in progress.                                   |
-| `task_done`         | Mark the active todo/task done.                                          |
-| `task_list`         | Native todo/task list; require no in-flight items at phase boundary.     |
-| `long_command`      | Native shell/session command with visible output capture.                |
-| `resume_after_wait` | Native session wait/resume mechanism if available; otherwise poll once. |
-| `handoff_summary`   | Native session summary + git state + `.scratchpad/dossier/` files.       |
+| `task_create`       | `todowrite`: create one todo per planned commit.                         |
+| `task_start`        | `todowrite`: mark exactly one todo `in_progress`.                        |
+| `task_done`         | `todowrite`: mark the todo `completed`.                                  |
+| `task_list`         | `todoread`; require no `in_progress` todos at phase boundary.            |
+| `long_command`      | `bash` with visible output capture / terminal session.                   |
+| `resume_after_wait` | Poll `bash` session if available; otherwise run a scoped check.          |
+| `handoff_summary`   | Session summary + `todoread` + git state + `.scratchpad/dossier/` files. |
+
+OpenCode's `task` permission launches subagents; dossier task state uses
+`todowrite` / `todoread`.
 
 If a runtime lacks a primitive, write the missing state into `PLAN.md` or
 `AUDIT.md` before continuing. Do not silently drop task state.

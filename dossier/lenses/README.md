@@ -34,8 +34,8 @@ fast:
 
 1. **Surface vocabulary.** What "the unit" / "an output" / "a
    contract" means in this stack.
-2. **Specific gates.** Meta-gate examples for this stack
-   (extends `META-GATE.md`).
+2. **Gate menu.** Meta-gate candidates for this stack. These are not
+   defaults; copy selected gates into `PLAN.md` / `SPEC.md`.
 3. **Output rebaseline specifics.** Build/regenerate command,
    golden artefact paths, accept command (extends
    `OUTPUT-REBASELINE.md`).

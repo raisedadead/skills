@@ -18,6 +18,7 @@
 #                          'generic' or omit -> no lens loaded.
 #   --with-superpowers     Symlink .scratchpad/dossier/PLAN.md to the latest file
 #                          under docs/superpowers/plans/ (if present).
+#                          .scratchpad/ stays ignored; the symlink target is tracked.
 #                          Requires obra/superpowers-style plan dir.
 
 set -euo pipefail
@@ -47,7 +48,7 @@ while [[ $# -gt 0 ]]; do
 		shift
 		;;
 	-h | --help)
-		sed -n '2,21p' "$0"
+		sed -n '2,22p' "$0"
 		exit 0
 		;;
 	--*)

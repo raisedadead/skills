@@ -31,7 +31,7 @@ run_command: <full test run + coverage / contract diff>
                                 # confirm no regression elsewhere
 
 # Land (rebaseline goldens included if output changed)
-commit_paths: <explicit paths>, "type(scope): subject (P<N>-Bxx)"
+commit_paths: <explicit paths>, "type(scope): subject (PH<N>-Bxx)"
 
 task_done
 ```
@@ -68,7 +68,7 @@ Land:
   git add src/styles/showcase.css \
           tests/behavioural/header-active-link.behaviour.spec.ts \
           tests/visual/__snapshots__/{handbook,routes}.spec.ts
-  git commit -m "feat(docs): paint yellow-gold underline on active nav link (P9-B8)"
+  git commit -m "feat(docs): paint yellow-gold underline on active nav link (PH9-B8)"
 ```
 
 ### Backend API (Go test + golden HTTP response)
@@ -96,7 +96,7 @@ Adjacent check + contract freeze:
 Land:
   git add internal/orders/handler.go \
           internal/orders/idempotency_test.go
-  git commit -m "fix(api): replay stored response on idempotency key reuse (P3-B7)"
+  git commit -m "fix(api): replay stored response on idempotency key reuse (PH3-B7)"
 ```
 
 ### CLI tool (bats + golden stdout)
@@ -123,7 +123,7 @@ Land:
   git add cmd/init.go \
           tests/golden/init-dry-run.bats \
           tests/golden/init-dry-run.txt
-  git commit -m "feat(cli): add --dry-run to init, print plan no-mutate (P2-B2)"
+  git commit -m "feat(cli): add --dry-run to init, print plan no-mutate (PH2-B2)"
 ```
 
 ## Coverage-only example — meta-gate sibling

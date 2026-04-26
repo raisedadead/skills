@@ -10,7 +10,10 @@ and drift is the enemy.
 - **Output:** plan diff (`terraform plan`, `pulumi preview`, `helm diff`), state export, IAM policy, manifest set.
 - **Contract:** plan-only diff against frozen baseline + cost estimate (optional) + policy compliance + drift = 0.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **Plan baseline freeze.** `terraform plan -out=tfplan && terraform show tfplan > baseline.txt`. Committed; CI re-plans, diffs against baseline. Surprise diff → fail.
 - **Provider / module pin.** `versions.tf` declares `version = "~> X.Y"` (or exact). Meta-gate regex on `versions.tf` floor.
@@ -56,7 +59,7 @@ Goldens: `baseline.txt` (plan diff), `policy/` (compiled OPA / Sentinel rules).
 - **Helm subchart override silently ignored.** Override path wrong (`subchart.foo` vs `foo`). → meta-gate via `helm template` diff before merge.
 - **Secret in `tfvars` committed.** → pre-commit hook + meta-gate (denylist patterns).
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for an infra phase:
 

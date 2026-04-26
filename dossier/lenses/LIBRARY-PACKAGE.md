@@ -10,7 +10,10 @@ semver governs every release.
 - **Output:** public API surface — `dist/index.d.ts`, `*.api.md`, `cargo public-api`, Go `golang.org/x/tools/cmd/apidiff`, Java `jdiff`.
 - **Contract:** exported symbol set + signatures + documented behaviour + supported runtime / engine versions.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **Public API surface freeze.** `api-surface.json` (or equivalent) committed; CI regenerates and `git diff --exit-code`. Diff → fail. Updates land with the breaking commit.
 - **Semver gate.** Meta-gate inspects the diff: any removed export → reject unless release metadata bumps `major`. Any added export → require `minor`. Other → `patch`.
@@ -52,7 +55,7 @@ Goldens: `api-surface.json`, `api.txt`, `*.api.md` (api-extractor),
 - **Side-effectful import.** Library import has runtime side effect (`window.X = ...`). → meta-gate on top-level statements in entrypoint.
 - **License field drift.** `package.json#license` differs from `LICENSE` file. → meta-gate.
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for a library phase:
 

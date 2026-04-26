@@ -40,8 +40,9 @@ Trigger this skill when the user asks for:
 ## Workflow (do this in order)
 
 1. **Pick a starting point.** Look in `assets/templates/` first. Match the user's intent:
+
    | Intent | Template |
-   |---|---|
+   | --- | --- |
    | Notify / announce | `announcement.json` |
    | Collect input | `form.json` |
    | Show metrics / status | `dashboard.json` |

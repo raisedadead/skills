@@ -6,10 +6,10 @@ Each top-level directory is one skill, structured per the [agentskills.io specif
 
 ## Index
 
-| Skill                               | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Runtime               |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| [google-ws-cards](google-ws-cards/) | Generate and validate Google Chat / Workspace add-on CardsV2 JSON. Drops into the Google UIkit Card Builder.                                                                                                                                                                                                                                                                                                                                                                                                 | Python 3.9+ stdlib    |
-| [dossier](dossier/)                 | Full, stack-neutral, phase-driven workflow for multi-phase initiatives — frontend, backend, CLI, library, mobile, data, infra, ML. Internal scratchpad theater lives under `.scratchpad/dossier/` (`PLAN.md`, `AUDIT.md`, `SPEC.md`, optional `LENS.md`, `closeout/`) and never writes dossier internals to `.changeset/`. Includes full workflow flavors, runtime adapters for Claude Code / OpenCode / Codex, and 8 opt-in `lenses/` for stack-specific gates and footguns. | Bash 4+ (init script) |
+| Skill | Purpose | Runtime |
+| --- | --- | --- |
+| [google-ws-cards](google-ws-cards/) | Generate and validate Google Chat / Workspace add-on CardsV2 JSON. Drops into the Google UIkit Card Builder. | Python 3.9+ stdlib |
+| [dossier](dossier/) | Stack-neutral phase workflow with scratchpad plan/audit/spec, closeout, flavors, runtime adapters, and opt-in stack lenses. | Bash 4+ (init script) |
 
 ## Install
 

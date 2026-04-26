@@ -10,7 +10,7 @@ Read once at phase start. Re-read on `/compact` recovery.
 
 - exactly one commit per task
 - title only; no commit body unless the "why" is non-obvious
-- format: `type(scope): subject (P<PHASE>-Bxx)`
+- format: `type(scope): subject (PH<PHASE>-Bxx)`
 - types: `feat` / `fix` / `test` / `chore` / `docs` / `refactor` / `perf` / `build` / `ci`
 - scopes: <list project units here — e.g. packages in a monorepo (`uikit`, `docs`), services in a polyrepo (`api`, `worker`, `web`), modules in a library (`auth`, `db`, `core`), or surfaces (`migration`, `infra`, `cli`)>
 - subject in imperative mood, ≤ 50 chars

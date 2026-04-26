@@ -10,7 +10,10 @@ lineage are the contract.
 - **Output:** schema (column names + types + constraints), row count + checksum, lineage (upstream / downstream), partition manifest.
 - **Contract:** schema diff + fixture roundtrip + idempotency on rerun + freshness SLA + row-count band.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **Schema freeze.** `schema.json` (or `target/manifest.json` for dbt) committed; CI regenerates and `git diff --exit-code`. Column add/drop/type-change → diff → fail.
 - **Fixture roundtrip.** For every model: a fixture lands a known input → run model → assert output matches frozen golden.
@@ -55,7 +58,7 @@ Goldens: `schema.json`, `target/manifest.json` (subset),
 - **CSV roundtrip drops type.** Date parsed as string on reload → comparison fails. → use parquet for golden fixtures.
 - **`current_user` differs across CI / local / prod.** Hardcoded user in DDL → permissions drift. → use roles, not users.
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for a data-pipeline phase:
 

@@ -10,7 +10,10 @@ SSR / hydration concerns.
 - **Output:** PNG snapshot, behavioural-spec assertion (computed style, role/state, text), DOM tree.
 - **Contract:** prop API + ARIA role/state + emitted events + CSS token usage.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **CSS-token discipline.** No hex literals in component styles. Strip block comments, regex offenders.
 - **`type=button` on every form-less button.** Walk components, regex offenders.
@@ -51,7 +54,7 @@ Goldens land in `tests/visual/__snapshots__/` (or per-runner config).
 - **Layout collapses to min-content.** Add `width: 100%` alongside `max-width` when parent is `align-items: stretch`.
 - **Component CSS `min-height: 100vh` overrides inline.** Set inline `minHeight: '0'` or null.
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for a web-frontend phase:
 

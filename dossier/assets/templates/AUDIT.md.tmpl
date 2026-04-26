@@ -17,17 +17,17 @@ the bottom is canonical.
 
 ## Severity scale
 
-- **P1** — blocks the release. User-visible breakage, data loss, regression on a contracted invariant, security incident.
-- **P2** — blocks the phase. Test or build red, behaviour wrong but not yet user-facing.
-- **P3** — polish. Visible drift, minor a11y, naming, log noise.
-- **P4** — nice-to-have. Defer freely.
+- **S1** — blocks the release. User-visible breakage, data loss, regression on a contracted invariant, security incident.
+- **S2** — blocks the phase. Test or build red, behaviour wrong but not yet user-facing.
+- **S3** — polish. Visible drift, minor a11y, naming, log noise.
+- **S4** — nice-to-have. Defer freely.
 
 ---
 
 ## B1 — <short title>
 
 Status: `[ ]`
-Severity: P?
+Severity: S?
 Surface: <component | endpoint | command | module | resource | dataset | model — pick the unit that names where it lives>
 Symptom: <what the operator / user / consumer sees. Include reproduction signal — log line, response body, exit code, screenshot ref, alert ID.>
 
@@ -51,7 +51,7 @@ Fix:
 ## B2 — <short title>
 
 Status: `[ ]`
-Severity: P?
+Severity: S?
 Surface:
 Symptom:
 
@@ -70,7 +70,7 @@ Fix:
 ## C1 — capability gap (not a bug)
 
 Status: `[ ]`
-Severity: P?
+Severity: S?
 Need: <what is missing>
 Why now: <why this phase needs it>
 Sketch: <rough approach>

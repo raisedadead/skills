@@ -1,7 +1,9 @@
 # Claude Code hook responses — literal messages + structured replies
 
-The harness fires hooks during the phase. Here are the literal
-messages we observed and the response pattern that satisfies each.
+These are observed Claude Code project-hook messages. Claude Code
+provides the hook event surface; the TDD gate below is a user-installed
+project hook, not a built-in Claude Code rule. If the hook is absent,
+enforce the same sibling-test covenant manually.
 
 ## PreToolUse:Edit/Write — TDD gate
 

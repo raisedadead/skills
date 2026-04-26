@@ -10,7 +10,10 @@ eval-set scores are the contract, and regressions hide in averages.
 - **Output:** eval-set scores (per-task accuracy / F1 / BLEU / win-rate / token usage), confusion matrix, sample inferences, training curve, embedding space.
 - **Contract:** scores within a regression band per eval set + fixture-determined sample inference + inference latency floor.
 
-## Specific gates (meta-gate extensions)
+## Gate menu (select per phase)
+
+These are gate candidates, not defaults. Copy only selected gates into
+`PLAN.md` / `SPEC.md`; leave the rest as context.
 
 - **Eval-set score band.** Per task: lower bound + upper bound. Meta-gate compares CI run vs band; out-of-band → fail. Bands ratchet up over time.
 - **Per-slice score floor.** Aggregate score green can mask per-subgroup regression. Meta-gate asserts floor on every slice (gender / locale / topic / length-bucket).
@@ -58,7 +61,7 @@ Goldens: `evals/<suite>/baseline.json` (scores), `fixtures/golden_inferences.jso
 - **Class imbalance in eval.** Macro-F1 looks bad because eval slice is heavily skewed. → assert eval-set distribution on load.
 - **Pretrained model version drift.** `from_pretrained("foo")` resolves to latest. → pin revision / SHA.
 
-## Phase shape hint
+## Phase shape hint (optional)
 
 Typical sub-phases for an ML phase:
 

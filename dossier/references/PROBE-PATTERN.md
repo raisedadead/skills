@@ -39,7 +39,7 @@ Probes need raw stdout. Wrap-style filters (RTK, lint reporters)
 swallow it. Use the runner's raw / verbose mode:
 
 | Stack      | Raw command                                                             |
-| ---------- | ----------------------------------------------------------------------- | ------------------- |
+| ---------- | ----------------------------------------------------------------------- |
 | Playwright | `rtk proxy npx playwright test -g _probe-<slug>` (or `--reporter=list`) |
 | vitest     | `pnpm exec vitest run _probe-<slug> --reporter=verbose`                 |
 | Go         | `go test ./<pkg>/ -run _probe -v -count=1`                              |
