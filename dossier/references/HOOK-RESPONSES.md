@@ -2,8 +2,10 @@
 
 These are observed Claude Code project-hook messages. Claude Code
 provides the hook event surface; the TDD gate below is a user-installed
-project hook, not a built-in Claude Code rule. If the hook is absent,
-enforce the same sibling-test covenant manually.
+project hook, not a built-in Claude Code rule. Dossier ships a lightweight
+implementation at `scripts/tdd-gate.py`; setup lives in
+`TDD-GATE-HOOK.md`. If hook is absent, enforce same sibling-test covenant
+manually.
 
 ## PreToolUse:Edit/Write — TDD gate
 

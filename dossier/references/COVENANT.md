@@ -15,7 +15,7 @@ Rules every commit in phase obeys. Project-tunable in
   - `scope` = project unit — package / service / module / surface (`api`, `worker`, `cli`, `migration`, `infra`, `evals`, etc.)
   - `subject` imperative mood, ≤ 50 chars
   - `(PH<N>-Bxx)` ties commit to row in `AUDIT.md §B`
-- **Sibling test in `git diff`.** PreToolUse TDD gate blocks Edit on impl files when no sibling test uncommitted in `git diff HEAD`. Write failing test first.
+- **Sibling test in `git diff`.** PreToolUse TDD gate (`scripts/tdd-gate.py`) blocks Edit on impl files when no sibling test/evidence exists in current worktree. Write failing test first.
 - **Rebaselined output included.** When fix changes recorded output (snapshots, OpenAPI, goldens, schema dumps, terraform plan baseline), updated artefact lands in same commit (see `OUTPUT-REBASELINE.md`).
 - **Meta-gate updates in same commit.** When structural rule strengthens (coverage threshold, public-API allowlist add, env-var allowlist, terraform deny-list), meta-test change lands with impl change.
 - **Update runtime task state.** Use selected adapter: `task_start` on start, `task_done` on finish. State must survive or be reconstructable after compact / session loss.

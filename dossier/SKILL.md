@@ -117,6 +117,7 @@ Load on demand:
 - `references/COVENANT.md` — per-task positive + negative rule list.
 - `references/TDD-ROUND.md` — RED -> GREEN -> COMMIT sequence.
 - `references/TDD-EXAMPLES.md` — stack examples; load only when needed.
+- `references/TDD-GATE-HOOK.md` — optional Claude Code hook setup.
 - `references/BACKPROP.md` — failed verification / bug -> `§B` + `§V`.
 - `references/DRIFT-CHECK.md` — read-only spec / code drift report.
 - `references/OUTPUT-REBASELINE.md` — golden / snapshot / contract rebaseline order.
