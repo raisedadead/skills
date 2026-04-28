@@ -1,88 +1,50 @@
-# Audit ledger — Phase <PHASE>
+# Audit Ledger — Phase {PHASE}
 
-Flavor: `<FLAVOR>`
+Flavor: `{FLAVOR}`
 
-Finding ledger for this phase. One section per finding —
-findings include bugs, regressions, contract violations,
-performance regressions, security issues, capability gaps. The
-per-section `Status:` field drifts; the **Resolution log** at
-the bottom is canonical.
+Finding ledger for this phase. The table is canonical; optional detail
+sections carry reproduction notes, hypotheses, probes, and before/after
+evidence when the table would get noisy.
 
 ## Status legend
 
-- `[ ]` open — not started.
-- `[x]` closed — fix landed (commit hash + finding-id reference).
-- `[~]` partial — partially landed, awaiting verify.
-- `[?]` investigating — symptom seen, root cause unclear.
+- `.` open
+- `~` in progress / partial
+- `?` investigating
+- `x` closed
+- `d` deferred
 
 ## Severity scale
 
-- **S1** — blocks the release. User-visible breakage, data loss, regression on a contracted invariant, security incident.
-- **S2** — blocks the phase. Test or build red, behaviour wrong but not yet user-facing.
-- **S3** — polish. Visible drift, minor a11y, naming, log noise.
-- **S4** — nice-to-have. Defer freely.
+- **S1** — blocks release: user-visible breakage, data loss, contracted
+  invariant regression, security incident.
+- **S2** — blocks phase: test/build red or behavior wrong.
+- **S3** — polish: visible drift, minor a11y, naming, log noise.
+- **S4** — nice-to-have: defer freely.
 
----
+## §B Findings
 
-## B1 — <short title>
+IDs are monotonic. Use `B1`, `B2`, ... for bugs/regressions/risks and
+`C1`, `C2`, ... for capability gaps.
 
-Status: `[ ]`
-Severity: S?
-Surface: <component | endpoint | command | module | resource | dataset | model — pick the unit that names where it lives>
-Symptom: <what the operator / user / consumer sees. Include reproduction signal — log line, response body, exit code, screenshot ref, alert ID.>
+| id | status | sev | surface | symptom / need | repro | fix | commit |
+| -- | ------ | --- | ------- | -------------- | ----- | --- | ------ |
+| B1 | . | S? | {surface} | {operator/user symptom} | {command/log/screenshot} | - | - |
+| C1 | . | S? | {surface} | {missing capability} | {acceptance signal} | - | - |
 
-Hypothesis (ordered, most likely first):
+## Detail — B1 {short title}
 
-1. <hypothesis>
-2. <hypothesis>
+Hypotheses, most likely first:
 
-Investigation TODO:
+1. {hypothesis}
+2. {hypothesis}
 
-- [ ] Read `<file>`
-- [ ] Run `<command>`
-- [ ] Probe `<area>` (see `references/PROBE-PATTERN.md`)
+Probe / repro plan:
 
-Fix:
+- [ ] Read `{file}`
+- [ ] Run `{command}`
+- [ ] Probe `{area}` (see `references/PROBE-PATTERN.md`)
 
-<once known — concrete change, file path, before/after snippet>
+Fix notes:
 
----
-
-## B2 — <short title>
-
-Status: `[ ]`
-Severity: S?
-Surface:
-Symptom:
-
-Hypothesis:
-
-1.
-
-Investigation TODO:
-
-- [ ]
-
-Fix:
-
----
-
-## C1 — capability gap (not a bug)
-
-Status: `[ ]`
-Severity: S?
-Need: <what is missing>
-Why now: <why this phase needs it>
-Sketch: <rough approach>
-
----
-
-## Resolution log
-
-Append at every phase boundary. This table is canonical — if a
-per-section `Status:` field disagrees with this log, the log wins.
-
-| Finding | Status | Commit | Notes |
-| ------- | ------ | ------ | ----- |
-| B1      |        |        |       |
-| B2      |        |        |       |
+{once known — concrete change, file path, before/after signal}

@@ -1,50 +1,54 @@
-# Phase <PHASE> Plan
+# Phase {PHASE} Plan
 
-Flavor: `<FLAVOR>`
+Flavor: `{FLAVOR}`
 
 ## Locked decisions
 
 Lock at the top before any code lands. Changing a locked decision
 mid-phase requires re-baselining the affected sub-phases.
 
-- Verification harness: <e.g. vitest, pytest, go test, cargo test, bats, terraform validate, dbt test — name the runner(s)>
-- Coverage / quality gate: <e.g. coverage ≥ 85, mutation score ≥ 60, contract tests pass, schema diff clean — pick the floor>
-- Output rebaseline mode (if applicable): <e.g. snapshot per-test vs blanket update; OpenAPI dump vs hand-curated; SQL diff freeze>
-- Issue tracker: <e.g. scratchpad dossier only / GitHub issues / linear / beads>
-- Per-task covenant: one commit, `type(scope): subject (PH<PHASE>-Bxx)` (see `SPEC.md` and `references/COVENANT.md`)
+- Verification harness: {e.g. vitest, pytest, go test, cargo test, bats, terraform validate, dbt test — name the runner(s)}
+- Coverage / quality gate: {e.g. coverage ≥ 85, mutation score ≥ 60, contract tests pass, schema diff clean — pick the floor}
+- Output rebaseline mode (if applicable): {e.g. snapshot per-test vs blanket update; OpenAPI dump vs hand-curated; SQL diff freeze}
+- Issue tracker: {e.g. scratchpad dossier only / GitHub issues / linear / beads}
+- Active state: `SPEC.md §T` is the compact task dashboard; this plan is narrative.
+- Per-task covenant: one commit, `type(scope): subject (PH{PHASE}-Bxx)` (see `SPEC.md` and `references/COVENANT.md`)
 - Push / PR / publish / deploy: NEVER without explicit user approval.
-- Lens: <web | backend | cli | lib | data | infra | mobile | ml | none>
-- Runtime adapter: <Claude Code | OpenCode | Codex>
-- <other invariants for this phase>
+- Lens: {web | backend | cli | lib | data | infra | mobile | ml | none}
+- Runtime adapter: {Claude Code | OpenCode | Codex}
+- {other invariants for this phase}
 
 ## Phase index
 
 | Sub-phase | Name                          | Tasks       | Expected commits |
 | --------- | ----------------------------- | ----------- | ---------------- |
-| P0        | <e.g. runner / scaffold>      | P0.1-P0.N   |                  |
-| P1        | <e.g. meta gates>             |             |                  |
-| P2        | <e.g. behavioural backfill>   |             |                  |
+| P0        | {e.g. runner / scaffold}      | P0.1-P0.N   |                  |
+| P1        | {e.g. meta gates}             |             |                  |
+| P2        | {e.g. behavioural backfill}   |             |                  |
 | ...       |                               |             |                  |
-| Pn        | <release / cut>               |             |                  |
+| Pn        | {release / cut}               |             |                  |
 
 ---
 
-## P0 — <name>
+## P0 — {name}
 
-Goal: <one line>
-Locked decisions: <inherits + any P0-specific>
-Target outcome: <observable signal: green CI, coverage ≥ X, all `[ ]` for B1-B5 → `[x]`, contract diff clean, plan exit-0>
-Expected commit prefix: `<type>(<scope>):`
-Expected commit count: <N>
+Goal: {one line}
+Locked decisions: {inherits + any P0-specific}
+Target outcome: {observable signal: green CI, coverage ≥ X, all `[ ]` for B1-B5 → `[x]`, contract diff clean, plan exit-0}
+Expected commit prefix: `{type}({scope}):`
+Expected commit count: {N}
+
+Tasks are vertical slices through a public interface, not layer-only work.
+Mirror active rows in `SPEC.md §T`.
 
 Tasks:
 
-- P0.1 — <subject>
-- P0.2 — <subject>
+- P0.1 — {subject}
+- P0.2 — {subject}
 
 ---
 
-## P1 — <name>
+## P1 — {name}
 
 Goal:
 Locked decisions:
@@ -59,7 +63,7 @@ Tasks:
 
 ---
 
-## P2 — <name>
+## P2 — {name}
 
 Goal:
 Locked decisions:
@@ -78,7 +82,8 @@ Tasks:
 Goal: internal closeout + final green.
 Tasks:
 
-- Pn.1 — write `.scratchpad/dossier/closeout/phase-<PHASE>-<slug>.md`
-- Pn.2 — final coverage / contract / drift sweep
-- Pn.3 — confirm `AUDIT.md` Resolution log current
-- Pn.4 — hand back to user for push / PR / publish / deploy
+- Pn.1 — write `.scratchpad/dossier/closeout/phase-{PHASE}-{slug}.md`
+- Pn.2 — run `references/DRIFT-CHECK.md`
+- Pn.3 — final coverage / contract / drift sweep
+- Pn.4 — confirm `AUDIT.md` finding table current
+- Pn.5 — hand back to user for push / PR / publish / deploy

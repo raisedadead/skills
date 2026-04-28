@@ -1,65 +1,63 @@
 ---
 name: dossier
 description: >
-  Full, stack-neutral, phase-driven engineering workflow for multi-phase
-  initiatives. Opens internal scratchpad theater under
-  `.scratchpad/dossier/` (`PLAN.md`, `AUDIT.md`, `SPEC.md`, optional
-  `LENS.md`, and `closeout/`) and runs a strict covenant: one commit per
-  task, sibling test in diff, RED -> GREEN -> COMMIT, explicit runtime
-  task state, and phase closeout. Use for feature waves, bug sweeps,
-  migrations, refactor waves, release hardening, rescue after compact, or
-  explicit "open a dossier" requests. Full protocol only; no lite mode.
+  Standalone, stack-neutral phase workflow for multi-phase engineering.
+  Opens `.scratchpad/dossier/` plan/spec/audit/closeout with compact
+  `§G/§C/§I/§V/§T/§B` state, strict one-commit TDD covenant, backprop,
+  drift checks, runtime adapters, and stack lenses. Use for feature
+  waves, bug sweeps, migrations, refactor/release hardening, compact
+  rescue, or explicit "open dossier" requests.
 license: MIT
 metadata:
   author: mrugesh
-  version: "0.3.0"
+  version: "0.4.0"
 allowed-tools: Bash(git:*) Bash(mkdir:*) Bash(ls:*) Bash(grep:*) Bash(find:*) Bash(sort:*) Bash(head:*) Bash(ln:*) Bash(sed:*) Bash(bash:*) Read Write Edit
 ---
 
 # dossier
 
-Full protocol for multi-phase engineering work. Dossier keeps the
-agent-facing plan, audit ledger, covenant, selected lens, and phase
-closeout inside `.scratchpad/dossier/`. It does **not** write to
+Full protocol for multi-phase engineering work. Dossier keeps
+agent-facing plan, compact phase spec, audit ledger, selected lens, and
+phase closeout inside `.scratchpad/dossier/`. Does **not** write to
 `.changeset/`; package-manager changesets and public release notes are
-external artifacts that require explicit user approval.
+external artifacts needing explicit user approval.
 
 ## Runtime
 
-The init script needs Bash 4+. Markdown templates work in Claude Code,
-OpenCode, and Codex via runtime adapters. Claude Code gets native
+Init script needs Bash 4+. Markdown templates work in Claude Code,
+OpenCode, Codex via runtime adapters. Claude Code gets native
 `TaskCreate` / `TaskUpdate` / `TaskList` and `ScheduleWakeup`; other
-runtimes map the same primitives to their own task and shell/session
+runtimes map same primitives to own task and shell/session
 tools.
 
 ## When to use
 
-Trigger this skill when:
+Trigger when:
 
-- A multi-phase initiative starts (more than ~6 tasks across distinct phases).
-- Bugs / findings need one ledger across a session or phase.
-- The user wants strict TDD covenant enforcement.
-- A migration, refactor wave, release-hardening pass, or service/API redesign needs tracked phases.
-- Session crosses compact / handoff and state must be reconstructed from disk.
-- The user explicitly says "open a dossier", "phase plan", "audit ledger", "TDD this initiative", "scaffold dossier", or "close the dossier".
+- Multi-phase initiative starts (>~6 tasks across distinct phases).
+- Bugs / findings need one ledger across session or phase.
+- User wants strict TDD covenant enforcement.
+- Migration, refactor wave, release-hardening pass, or service/API redesign needs tracked phases.
+- Session crosses compact / handoff, state must reconstruct from disk.
+- User explicitly says "open a dossier", "phase plan", "audit ledger", "TDD this initiative", "scaffold dossier", "close the dossier".
 
-Skip this skill for one-shot edits, isolated bug fixes, pure research,
-or anything where one normal commit is enough.
+Skip for one-shot edits, isolated bug fixes, pure research,
+or anything where one normal commit enough.
 
 ## Router
 
-Before work starts, pick exactly one item from each axis:
+Before work starts, pick exactly one per axis:
 
-1. **Flavor** — read `references/FLAVORS.md` and choose:
+1. **Flavor** — read `references/FLAVORS.md`, choose:
    `feature-wave`, `bug-sweep`, `migration`, `refactor-wave`,
    `release-hardening`, or `rescue`.
-2. **Runtime adapter** — read `references/RUNTIME-ADAPTERS.md` and map
+2. **Runtime adapter** — read `references/RUNTIME-ADAPTERS.md`, map
    shared primitives (`task_start`, `task_done`, `long_command`,
    `resume_after_wait`, etc.) to Claude Code, OpenCode, or Codex.
-3. **Lens** — load at most one file from `lenses/` for the dominant
-   stack. If the phase spans stacks, name secondary gates in `PLAN.md`.
+3. **Lens** — load at most one file from `lenses/` for dominant
+   stack. If phase spans stacks, name secondary gates in `PLAN.md`.
 
-Then read `references/CORE.md`. Load deeper references only when the
+Then read `references/CORE.md`. Load deeper references only when
 phase needs them.
 
 ## Init
@@ -69,11 +67,10 @@ bash <skill-dir>/scripts/init-dossier.sh \
   --phase <number> \
   --flavor <feature-wave|bug-sweep|migration|refactor-wave|release-hardening|rescue> \
   --lens <web|backend|cli|lib|data|infra|mobile|ml|generic> \
-  [--with-superpowers] \
   [<project-root>]
 ```
 
-The script creates:
+Script creates:
 
 ```text
 .scratchpad/dossier/
@@ -85,26 +82,30 @@ The script creates:
     TEMPLATE.md
 ```
 
-`.scratchpad/` is gitignored. `closeout/` is internal theater tooling.
+`.scratchpad/` gitignored. `closeout/` internal theater tooling.
 Do not use `.changeset/` for dossier internals.
 
 ## Full workflow
 
 1. Fill `PLAN.md`: flavor, phases, locked decisions, expected commit count.
-2. Seed `AUDIT.md`: known B-ids/C-ids, severity, reproduction signal.
-3. Confirm `SPEC.md`: covenant, allowed scopes, phase invariants.
+2. Fill `SPEC.md`: compact `§G`, `§C`, `§I`, `§V`, `§T`, `§B` state.
+3. Seed `AUDIT.md`: known B-ids/C-ids, severity, reproduction signal.
 4. Read selected `LENS.md`, if present.
-5. For each planned commit:
+5. Per planned commit:
    - `task_start`
-   - read relevant plan/audit/spec/lens context
-   - run `references/TDD-ROUND.md`: RED -> GREEN -> adjacent check -> COMMIT
-   - use `references/BG-LOOP.md` for long commands via the runtime adapter
+   - flip active `§T` row from `.` to `~`
+   - read relevant plan/spec/audit/lens context
+   - run `references/TDD-ROUND.md`: vertical RED -> GREEN -> adjacent check -> COMMIT
+   - on failed verification, run `references/BACKPROP.md`
+   - use `references/BG-LOOP.md` for long commands via runtime adapter
+   - flip active `§T` row from `~` to `x`
    - `task_done`
 6. At phase boundary:
-   - update `AUDIT.md` Resolution log
-   - confirm runtime task list has zero in-flight work
+   - run `references/DRIFT-CHECK.md`
+   - update `AUDIT.md` finding table
+   - confirm runtime task list zero in-flight work
    - write `.scratchpad/dossier/closeout/phase-<N>-<slug>.md`
-7. Hand back push / PR / publish / deploy to the user.
+7. Hand back push / PR / publish / deploy to user.
 
 ## References
 
@@ -115,6 +116,9 @@ Load on demand:
 - `references/RUNTIME-ADAPTERS.md` — Claude Code / OpenCode / Codex primitive mapping.
 - `references/COVENANT.md` — per-task positive + negative rule list.
 - `references/TDD-ROUND.md` — RED -> GREEN -> COMMIT sequence.
+- `references/TDD-EXAMPLES.md` — stack examples; load only when needed.
+- `references/BACKPROP.md` — failed verification / bug -> `§B` + `§V`.
+- `references/DRIFT-CHECK.md` — read-only spec / code drift report.
 - `references/OUTPUT-REBASELINE.md` — golden / snapshot / contract rebaseline order.
 - `references/META-GATE.md` — structural invariant tests.
 - `references/BG-LOOP.md` — long-command pacing across runtimes.
@@ -122,7 +126,6 @@ Load on demand:
 - `references/HANDOFF.md` — compact / session recovery.
 - `references/HOOK-RESPONSES.md` — Claude Code hook responses.
 - `references/FAILURE-MODES.md` — stack-neutral footguns.
-- `references/SUPERPOWERS-INTEGRATION.md` — optional composition.
 
 Lenses:
 
@@ -137,10 +140,11 @@ Lenses:
 
 ## Output contract
 
-When the dossier closes, your final message must include:
+When dossier closes, final message must include:
 
-1. Path to the internal closeout note under `.scratchpad/dossier/closeout/`.
-2. Confirmation that `AUDIT.md` Resolution log is current.
-3. Confirmation that runtime task state shows zero in-flight work.
-4. Explicit hand-back for push / PR / publish / deploy.
-5. Any public release-note or package-changeset export that still needs user approval.
+1. Path to internal closeout note under `.scratchpad/dossier/closeout/`.
+2. Confirm `AUDIT.md` finding table current.
+3. Confirm runtime task state shows zero in-flight work.
+4. Confirm final drift check ran or explicitly skipped.
+5. Explicit hand-back for push / PR / publish / deploy.
+6. Any public release-note or package-changeset export still needing user approval.

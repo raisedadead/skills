@@ -1,61 +1,59 @@
-# Phase <PHASE> Spec — Covenant + Invariants
+# Phase {PHASE} Spec
 
-Flavor: `<FLAVOR>`
+Flavor: `{FLAVOR}`
 
-Read once at phase start. Re-read on `/compact` recovery.
+Compact active state for this phase. Keep it short enough to read every
+task. Use `PLAN.md` for narrative planning and `AUDIT.md` for evidence.
 
-## Per-task covenant
+## §G Goal
 
-### Positive (every task does this)
+{one-line phase outcome}
 
-- exactly one commit per task
-- title only; no commit body unless the "why" is non-obvious
-- format: `type(scope): subject (PH<PHASE>-Bxx)`
-- types: `feat` / `fix` / `test` / `chore` / `docs` / `refactor` / `perf` / `build` / `ci`
-- scopes: <list project units here — e.g. packages in a monorepo (`uikit`, `docs`), services in a polyrepo (`api`, `worker`, `web`), modules in a library (`auth`, `db`, `core`), or surfaces (`migration`, `infra`, `cli`)>
-- subject in imperative mood, ≤ 50 chars
-- sibling test in `git diff` (TDD gate enforced — see `references/HOOK-RESPONSES.md`)
-- rebaselined goldens included in the same commit when output changes (see `references/OUTPUT-REBASELINE.md`)
-- meta-gate updates in same commit when applicable (see `references/META-GATE.md`)
+## §C Constraints
 
-### Negative (no task ever does this)
+- Per-task covenant: one commit, explicit path staging, sibling test or
+  meta-gate, `type(scope): subject (PH{PHASE}-Bxx)`.
+- Scope names: {project units: packages, services, modules, surfaces}.
+- Verification harness: {test/build/lint/contract commands}.
+- Output rebaseline mode: {scoped / full / not applicable}.
+- Push / PR / publish / deploy: user-owned only.
+- Out of scope: {things this phase must not touch}.
 
-- never `git add -A` or `git add .` — explicit paths only
-- never `--no-verify` / `--no-gpg-sign`
-- never `git commit --amend` after publish
-- never HEREDOC in `git commit -m "..."`
-- never backticks in commit messages (PreToolUse pattern matches command substitution)
-- never `git reset --hard` on tracked changes
-- never `git push` (user owns push)
-- never `gh pr create` (user owns PR)
-- never `npm publish` / `changeset publish` / `cargo publish` / `terraform apply` / `kubectl apply` / `dbt run` against prod (user owns release / deploy / apply)
-- never use `.changeset/` for dossier internals — closeout stays under `.scratchpad/dossier/closeout/`
-- never edit `.env` files (read-blocked + write-blocked)
-- never co-author lines (disabled in user settings anyway)
-- never touch parallel-session work — multiple sessions may run; never revert / checkout / discard without confirmation
+## §I Interfaces
 
-## Invariants (R-rules)
+External surfaces this phase may touch. Preserve identifiers verbatim.
 
-These hold across the phase. If a task would violate one, file a
-new finding in `AUDIT.md` instead.
+- api: {route / request / response}
+- cmd: `{command}` -> {stdout/stderr/exit}
+- file: `{path}` -> {schema / contract}
+- env: `{VAR}` -> {required / optional}
+- ui: {screen / component} -> {observable behavior}
 
-Stack-neutral floor (always on):
+## §V Invariants
 
-- **R1** — every changed unit has at least one sibling test in the same commit (TDD gate)
-- **R2** — flaky single test: skip + file a finding, never raise project-wide retry count
-- **R3** — long-running command (>30s wall): use the selected runtime adapter, never `sleep` in shell
-- **R4** — formatter reformats after Edit/Write: `Read` again before next Edit on the same file
-- **R5** — TDD gate blocks impl edit without sibling test in `git diff`: write the test first
-- **R6** — meta-gate test counts as the sibling for config / threshold / structural files (see `references/META-GATE.md`)
-- **R7** — output rebaseline never runs before the unbaselined diff is read (see `references/OUTPUT-REBASELINE.md`)
+Testable rules that must hold. Numbering is monotonic; never reuse IDs.
 
-Phase-specific (fill in for this phase):
+- V1: every changed unit has sibling behavior test, meta-gate, or recorded-output rebaseline in same commit
+- V2: tasks are vertical slices through public interfaces, not layer-only edits
+- V3: flaky single test -> skip + file finding, never raise project-wide retry count
+- V4: long command >30s uses runtime adapter, never shell `sleep`
+- V5: output rebaseline never runs before unbaselined diff is read
+- V6: {phase-specific invariant}
 
-- **R8** — <invariant: e.g. "all public exports listed in `api-surface.json`">
-- **R9** — <invariant: e.g. "all DB migrations linear, no merge conflicts on serial">
-- **R10** — <invariant: e.g. "all CLI commands have exit-code matrix in fixtures">
+## §T Tasks
 
-## Lens addendum
+Status: `.` todo / `~` wip / `x` done. Keep IDs monotonic.
 
-If a lens is loaded (`.scratchpad/dossier/LENS.md`), its invariants extend
-the R-rules above. Keep numbering contiguous (R8, R9, …).
+| id | status | task | finding | cites |
+| -- | ------ | ---- | ------- | ----- |
+| T1 | . | {vertical slice through public interface} | B1 | V1,I.api |
+| T2 | . | {next vertical slice} | C1 | V2,I.ui |
+
+## §B Bugs / Findings
+
+Compact backprop log. Sync details to `AUDIT.md` when evidence does not
+fit here.
+
+| id | date | cause | fix |
+| -- | ---- | ----- | --- |
+| B1 | {YYYY-MM-DD} | {root cause or risk} | {V-id / task / commit} |

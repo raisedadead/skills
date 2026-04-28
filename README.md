@@ -1,39 +1,43 @@
 # Skills
 
-A personal marketplace of [Agent Skills](https://agentskills.io) — portable, vendor-neutral capabilities for AI coding agents.
+Personal marketplace of [Agent Skills](https://agentskills.io) — portable, vendor-neutral capabilities for AI coding agents.
 
-Each top-level directory is one skill, structured per the [agentskills.io specification](https://agentskills.io/specification): a `SKILL.md` plus optional `scripts/`, `references/`, `assets/`, and `evals/`.
+Each top-level dir = one skill, per [agentskills.io spec](https://agentskills.io/specification): `SKILL.md` + optional `scripts/`, `references/`, `assets/`, `evals/`.
 
 ## Index
 
 | Skill | Purpose | Runtime |
 | --- | --- | --- |
-| [google-ws-cards](google-ws-cards/) | Generate and validate Google Chat / Workspace add-on CardsV2 JSON. Drops into the Google UIkit Card Builder. | Python 3.9+ stdlib |
-| [dossier](dossier/) | Stack-neutral phase workflow with scratchpad plan/audit/spec, closeout, flavors, runtime adapters, and opt-in stack lenses. | Bash 4+ (init script) |
+| [google-ws-cards](google-ws-cards/) | Generate + validate Google Chat / Workspace add-on CardsV2 JSON. Drops into Google UIkit Card Builder. | Python 3.9+ stdlib |
+| [dossier](dossier/) | Standalone phase workflow: compact spec state, audit ledger, backprop, drift checks, runtime adapters, closeout, flavors, opt-in stack lenses. | Bash 4+ (init script) |
 
 ## Install
 
-The default install path is the [`skills`](https://www.npmjs.com/package/skills) CLI.
+Default path: [`skills`](https://www.npmjs.com/package/skills) CLI.
 
-**Install every skill in this repo:**
+**Install all skills:**
 
 ```bash
 npx skills add raisedadead/skills
 ```
 
-**Install a single skill:**
+**Install single skill:**
 
 ```bash
 npx skills add raisedadead/skills -s google-ws-cards
 ```
 
-**Target a specific agent** (e.g. Claude Code, Cursor, Gemini CLI, OpenCode):
+```bash
+npx skills add raisedadead/skills -s dossier
+```
+
+**Target specific agent** (Claude Code, Cursor, Gemini CLI, OpenCode):
 
 ```bash
 npx skills add raisedadead/skills -a claude-code
 ```
 
-**Install globally** (user directory, not project):
+**Install globally** (user dir, not project):
 
 ```bash
 npx skills add raisedadead/skills -g
@@ -41,27 +45,35 @@ npx skills add raisedadead/skills -g
 
 ### Alternative: manual install
 
-Clone or symlink directly into your agent's skill discovery path:
+Clone or symlink into agent's skill discovery path:
 
 ```bash
 git clone https://github.com/raisedadead/skills.git
 ln -s "$(pwd)/skills/google-ws-cards" ~/.claude/skills/google-ws-cards
 ```
 
-Each `SKILL.md` is self-contained — copy the directory into any agent's skills folder.
+```bash
+ln -s "$(pwd)/skills/dossier" ~/.claude/skills/dossier
+```
+
+Each `SKILL.md` self-contained — copy dir into any agent's skills folder.
 
 ## Compatibility
 
-These skills run on any agent runtime that supports the [Agent Skills standard](https://agentskills.io/#adoption), including Claude Code, Claude.ai, Cursor, Gemini CLI, OpenCode, GitHub Copilot, VS Code, Goose, and [many others](https://agentskills.io/#adoption).
+Skills run on any runtime supporting [Agent Skills standard](https://agentskills.io/#adoption): Claude Code, Claude.ai, Cursor, Gemini CLI, OpenCode, GitHub Copilot, VS Code, Goose, [many others](https://agentskills.io/#adoption).
 
 ## Validate
 
-Every skill is checked with the official [skills-ref](https://github.com/agentskills/agentskills/tree/main/skills-ref) validator:
+Every skill checked via official [skills-ref](https://github.com/agentskills/agentskills/tree/main/skills-ref) validator:
 
 ```bash
 skills-ref validate ./google-ws-cards
 ```
 
+```bash
+skills-ref validate ./dossier
+```
+
 ## License
 
-[MIT](LICENSE) — see individual `SKILL.md` files for per-skill notes.
+[MIT](LICENSE) — see individual `SKILL.md` for per-skill notes.
