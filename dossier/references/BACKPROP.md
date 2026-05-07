@@ -51,7 +51,7 @@ Update `AUDIT.md` with severity, repro signal, fix notes, commit hash when lande
 Backprop commit obeys dossier covenant:
 
 ```text
-fix(api): replay stored refund response (PH<N>-B7)
+fix(api): replay stored refund response
 ```
 
 Stage explicit paths only: spec/audit edits, test, implementation, any rebaselined recorded output.

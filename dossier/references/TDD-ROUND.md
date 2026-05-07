@@ -40,7 +40,7 @@ run_command: <full test run + coverage / contract diff>
                                 # confirm no regression elsewhere
 
 # Land (rebaseline goldens included if output changed)
-commit_paths: <explicit paths>, "type(scope): subject (PH<N>-Bxx)"
+commit_paths: <explicit paths>, "type(scope): subject"
 
 task_done
 ```
