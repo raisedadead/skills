@@ -48,3 +48,17 @@ Block message tells agent to:
 
 Emergency bypass: `DOSSIER_TDD_GATE=off`. Use only with written rationale
 in `AUDIT.md`.
+
+## Verify the gate
+
+Self-contained smoke test in `scripts/test-tdd-gate.sh`. Exercises the
+five branches (unevidenced impl edit blocks, untracked test allows,
+meta-gate allows, test-file write allows, inactive dossier allows) in a
+throwaway git repo:
+
+```bash
+bash <skill-dir>/scripts/test-tdd-gate.sh
+```
+
+Exits `0` on `ok`. Run after editing `tdd-gate.py` or its evidence
+heuristics.

@@ -46,11 +46,14 @@ or anything where one normal commit enough.
 
 ## Router
 
-Before work starts, pick exactly one per axis:
+Pick a starting point per axis. None of these lock for the whole
+initiative — flavor and lens swap freely between phases when work shape
+shifts. Runtime adapter usually stays fixed (it's the host), but is
+swappable on handoff.
 
 1. **Flavor** — read `references/FLAVORS.md`, choose:
    `feature-wave`, `bug-sweep`, `migration`, `refactor-wave`,
-   `release-hardening`, or `rescue`.
+   `release-hardening`, or `rescue`. Default `feature-wave`.
 2. **Runtime adapter** — read `references/RUNTIME-ADAPTERS.md`, map
    shared primitives (`task_start`, `task_done`, `long_command`,
    `resume_after_wait`, etc.) to Claude Code, OpenCode, or Codex.
@@ -105,7 +108,15 @@ Do not use `.changeset/` for dossier internals.
    - update `AUDIT.md` finding table
    - confirm runtime task list zero in-flight work
    - write `.scratchpad/dossier/closeout/phase-<N>-<slug>.md`
-7. Hand back push / PR / publish / deploy to user.
+
+## Autonomy
+
+Within a phase, commit each covenant task autonomously. Rationale lives
+in the commit subject (`type(scope): subject`); no out-of-band approval
+between commits. Pause only at phase boundary or on covenant violation.
+User-owned ops (push, PR, publish, deploy, package-changeset export)
+stay user-owned per `references/COVENANT.md` negative table — stated
+once, not re-litigated per task.
 
 ## References
 
@@ -147,5 +158,4 @@ When dossier closes, final message must include:
 2. Confirm `AUDIT.md` finding table current.
 3. Confirm runtime task state shows zero in-flight work.
 4. Confirm final drift check ran or explicitly skipped.
-5. Explicit hand-back for push / PR / publish / deploy.
-6. Any public release-note or package-changeset export still needing user approval.
+5. User-owned ops still pending (push / PR / publish / deploy / changeset export) — list once, no chatter.

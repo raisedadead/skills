@@ -127,10 +127,19 @@ elif [[ -f "$TMPL" ]]; then
 	created=$((created + 1))
 fi
 
-# Internal closeout template. The phase closeout itself is written at close.
+# Internal closeout template. Rendered eagerly only for flavors where every
+# phase ships a closeout note. Other flavors render on demand at phase close
+# (trivial phases ≤ 2 commits skip the note entirely — see PLAN.md.tmpl).
 CLOSEOUT_TEMPLATE="$CLOSEOUT_DIR/TEMPLATE.md"
 TMPL="$TEMPLATES_DIR/CLOSEOUT.md.tmpl"
-if [[ -f "$CLOSEOUT_TEMPLATE" ]]; then
+case "$FLAVOR" in
+migration | release-hardening) RENDER_CLOSEOUT=1 ;;
+*) RENDER_CLOSEOUT=0 ;;
+esac
+if [[ "$RENDER_CLOSEOUT" -eq 0 ]]; then
+	printf "skip: %s (flavor '%s' renders closeout on demand)\n" "$CLOSEOUT_TEMPLATE" "$FLAVOR"
+	skipped=$((skipped + 1))
+elif [[ -f "$CLOSEOUT_TEMPLATE" ]]; then
 	printf "skip: %s already exists\n" "$CLOSEOUT_TEMPLATE"
 	skipped=$((skipped + 1))
 elif [[ -f "$TMPL" ]]; then

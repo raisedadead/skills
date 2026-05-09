@@ -20,13 +20,12 @@ mid-phase requires re-baselining the affected sub-phases.
 
 ## Phase index
 
-| Sub-phase | Name                          | Tasks       | Expected commits |
-| --------- | ----------------------------- | ----------- | ---------------- |
-| P0        | {e.g. runner / scaffold}      | P0.1-P0.N   |                  |
-| P1        | {e.g. meta gates}             |             |                  |
-| P2        | {e.g. behavioural backfill}   |             |                  |
-| ...       |                               |             |                  |
-| Pn        | {release / cut}               |             |                  |
+| Sub-phase | Name                          | Tasks       |
+| --------- | ----------------------------- | ----------- |
+| P0        | {e.g. runner / scaffold}      | P0.1-P0.N   |
+| P1        | {e.g. meta gates}             |             |
+| P2        | {e.g. behavioural backfill}   |             |
+| ...       |                               |             |
 
 ---
 
@@ -36,7 +35,6 @@ Goal: {one line}
 Locked decisions: {inherits + any P0-specific}
 Target outcome: {observable signal: green CI, coverage ≥ X, all `[ ]` for B1-B5 → `[x]`, contract diff clean, plan exit-0}
 Expected commit prefix: `{type}({scope}):`
-Expected commit count: {N}
 
 Tasks are vertical slices through a public interface, not layer-only work.
 Mirror active rows in `SPEC.md §T`.
@@ -54,7 +52,6 @@ Goal:
 Locked decisions:
 Target outcome:
 Expected commit prefix:
-Expected commit count:
 
 Tasks:
 
@@ -69,7 +66,6 @@ Goal:
 Locked decisions:
 Target outcome:
 Expected commit prefix:
-Expected commit count:
 
 Tasks:
 
@@ -77,13 +73,14 @@ Tasks:
 
 ---
 
-## Pn — closeout
+## Phase exit checklist
 
-Goal: internal closeout + final green.
-Tasks:
+Closeout is an event, not a sub-phase. Run before declaring the phase
+complete:
 
-- Pn.1 — write `.scratchpad/dossier/closeout/phase-{PHASE}-{slug}.md`
-- Pn.2 — run `references/DRIFT-CHECK.md`
-- Pn.3 — final coverage / contract / drift sweep
-- Pn.4 — confirm `AUDIT.md` finding table current
-- Pn.5 — hand back to user for push / PR / publish / deploy
+- [ ] `references/DRIFT-CHECK.md` ran clean (or drift recorded in `AUDIT.md`)
+- [ ] Final coverage / contract / drift sweep green
+- [ ] `AUDIT.md §B` finding table reflects landed commits
+- [ ] Runtime task list shows zero `in_progress`
+- [ ] Closeout note written: `.scratchpad/dossier/closeout/phase-{PHASE}-{slug}.md`
+      (skip for trivial phases ≤ 2 commits unless flavor is `migration` or `release-hardening`)

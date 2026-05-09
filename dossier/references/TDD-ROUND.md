@@ -31,6 +31,16 @@ Read <audit finding>            # .scratchpad/dossier/AUDIT.md row/detail
 Write <new sibling test file>   # one behavior through public interface
 run_command: <narrow test run>  # confirm RED (or coverage-only PASS)
 
+# RED diagnosis — failure must be on the assertion you care about.
+# These are BROKEN TESTS, not RED:
+#   - ImportError / ModuleNotFoundError / SyntaxError
+#   - "fixture not found" / "test not collected" / 0 tests run
+#   - NameError / undefined symbol in the test itself
+#   - timeout before assertion / setup-only crash
+# If failure looks like any of those, fix the test until it fails for
+# the *behavior reason* (assertion mismatch, exception from impl).
+# Then proceed to GREEN.
+
 # GREEN
 Edit <impl file>                # TDD gate/adapter accepts (sibling in git diff)
 run_command: <narrow test run>  # confirm GREEN
