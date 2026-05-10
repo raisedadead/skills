@@ -118,6 +118,19 @@ User-owned ops (push, PR, publish, deploy, package-changeset export)
 stay user-owned per `references/COVENANT.md` negative table — stated
 once, not re-litigated per task.
 
+## Source hygiene
+
+Source files stay phase-agnostic. **Never** write phase, stage, or
+audit-id markers in code or test comments — `// Phase 1:`,
+`// Step N:`, `// Stage 3`, `// V11 (Phase 3 / A7):`, `// PH3-B7`.
+Phase / audit tracking lives in `.scratchpad/dossier/PLAN.md` and
+`AUDIT.md §B` only. Comments in source explain _why_ (workaround refs,
+non-obvious invariants, upstream-bug links), not _which phase_.
+
+Optional `PreToolUse` enforcement: `references/MARKER-GUARD-HOOK.md`
+wires `scripts/marker-guard.py` to `Edit|Write|MultiEdit` and blocks
+markers before they land.
+
 ## References
 
 Load on demand:
@@ -129,6 +142,7 @@ Load on demand:
 - `references/TDD-ROUND.md` — RED -> GREEN -> COMMIT sequence.
 - `references/TDD-EXAMPLES.md` — stack examples; load only when needed.
 - `references/TDD-GATE-HOOK.md` — optional Claude Code hook setup.
+- `references/MARKER-GUARD-HOOK.md` — optional phase-marker block hook.
 - `references/BACKPROP.md` — failed verification / bug -> `§B` + `§V`.
 - `references/DRIFT-CHECK.md` — read-only spec / code drift report.
 - `references/OUTPUT-REBASELINE.md` — golden / snapshot / contract rebaseline order.
