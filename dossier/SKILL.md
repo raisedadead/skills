@@ -110,6 +110,7 @@ Progressive disclosure — each reference names the symptom that should trigger 
 | `FLAVORS.md`           | picking the starting flavor, or re-flavoring at a phase boundary                  |
 | `RUNTIME-ADAPTERS.md`  | first read, or handoff to a different host runtime                                |
 | `COVENANT.md`          | first read; revisit when a covenant violation surfaces                            |
+| `EXAMPLES.md`          | want per-stack phase-tail commit examples to anchor the rules                     |
 | `TDD.md`               | every task; load deferred Examples / Gate-hook sections only when stuck or wiring |
 | `MARKER-GUARD-HOOK.md` | wiring the phase-marker block hook                                                |
 | `COMMIT-GUARD-HOOK.md` | wiring the commit covenant block hook                                             |
