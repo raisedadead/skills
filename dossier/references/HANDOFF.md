@@ -11,7 +11,7 @@ Block at top of context with these keys:
 - **Files Modified** — file list (no diff content).
 - **Unresolved Errors** — truncated stderr blocks from failed background commands.
 - **Git** — operations performed (diff, commit, log, status).
-- **Project Rules** — path to `.claude/CLAUDE.md`.
+- **Project Rules** — path to the runtime's rule file (`.claude/CLAUDE.md`, `AGENTS.md`, `.codex/instructions.md`, etc.).
 - **Skills Used** — array of skill names invoked in prior half.
 - **Environment** — cwd at compact time, last command issued.
 - **Session Intent** — short label (e.g. "review", "build", "debug").
@@ -32,22 +32,22 @@ Block at top of context with these keys:
 In order:
 
 1. **Read `/compact` summary block** at top of context (automatic; no tool call).
-2. **`task_list`** — confirm in-flight task survived. Read full description.
-3. **Read `.scratchpad/dossier/PLAN.md`** at phase you were in.
-4. **Read `.scratchpad/dossier/AUDIT.md`** for finding row/detail in-flight task references.
-5. **`git log --oneline | head -<n>`** — confirm commits in summary landed.
-6. **`git status --short`** — see uncommitted changes (likely WIP for in-flight task).
-7. **Resume in-flight task** at whatever step its TDD round was on (RED, GREEN, adjacent check, land).
+1. **`task_list`** — confirm in-flight task survived. Read full description.
+1. **Read `.scratchpad/dossier/PLAN.md`** at phase you were in.
+1. **Read `.scratchpad/dossier/AUDIT.md`** for finding row/detail in-flight task references.
+1. **`git log --oneline | head -<n>`** — confirm commits in summary landed.
+1. **`git status --short`** — see uncommitted changes (likely WIP for in-flight task).
+1. **Resume in-flight task** at whatever step its TDD round was on (RED, GREEN, adjacent check, land).
 
 ## What we did NOT use
 
-Available but not needed for prior phase recovery:
+Available but rarely needed for prior phase recovery:
 
-- `episodic-memory:search-conversations` — scratchpad files + git log enough.
+- Cross-session memory search (e.g. an `episodic-memory` MCP or other conversation-archive lookup) — scratchpad files plus `git log` are usually enough.
 - Subagent dispatch — solo session.
-- MCP servers — none needed.
+- MCP servers — none required by the protocol.
 
-If scratchpad missing/corrupt and `git log` not reconstruct enough state, fall back to `episodic-memory:search-conversations` for prior session decisions.
+If the scratchpad is missing or corrupt and `git log` cannot reconstruct enough state, fall back to whatever cross-session memory search the host runtime provides (Claude Code MCP, OpenCode session archive, Codex history, etc.) for prior session decisions.
 
 ## Within the post-compact half
 
