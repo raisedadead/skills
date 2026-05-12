@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: mrugesh
-  version: 0.4.0
+  version: 0.5.0
 allowed-tools: Bash(git:*) Bash(mkdir:*) Bash(ls:*) Bash(grep:*) Bash(find:*) Bash(sort:*) Bash(head:*) Bash(ln:*) Bash(sed:*) Bash(bash:*) Read Write Edit
 ---
 
@@ -134,6 +134,7 @@ Progressive disclosure — each reference names the symptom that should trigger 
 | `HANDOFF.md`           | session crosses compact / interrupted / unclear branch state                      |
 | `HOOK-RESPONSES.md`    | a runtime hook emitted a literal message and you need to interpret it             |
 | `FAILURE-MODES.md`     | stuck on a known footgun; want the stack-neutral failure catalogue                |
+| `HARNESS-RATCHET.md`   | proposing a new rule or retiring an old one; opening / closing a release          |
 
 Lenses:
 
