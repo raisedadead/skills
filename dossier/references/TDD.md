@@ -57,6 +57,18 @@ task_done
 
 If verification fails, do not retry blind. Use `BACKPROP.md` to decide: code bug, spec bug, or missing invariant. Resume the round with updated evidence.
 
+## Read order — keep the prompt cache warm
+
+The first action after `task_start` should be a deterministic batched read of the stable preamble files, in this exact order:
+
+1. `.scratchpad/dossier/SPEC.md`
+1. `.scratchpad/dossier/LENS.md` (if present)
+1. `references/COVENANT.md` (if not already in context this session)
+
+Stable order = stable prompt prefix = prompt-cache hit across rounds within a phase. After this batched read, do all task-specific reads (impl file, sibling test, audit detail, etc.). Reversing or interleaving the order breaks the cache prefix and pays the full re-read cost every round.
+
+This is a cheap rule with a meaningful token / latency win on Anthropic prompt caching; equivalent caches exist on other runtimes. The point is *determinism* — a fixed order at the top of every round.
+
 ## Total wall clock
 
 Typical coverage-only round ~3 min. True RED → GREEN → rebaseline round ~10–15 min (one or two runtime wait/resume cycles for build + rebaseline).
