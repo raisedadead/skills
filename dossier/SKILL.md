@@ -124,6 +124,7 @@ Progressive disclosure — each reference names the symptom that should trigger 
 | `TDD.md`               | every task; load deferred Examples / Gate-hook sections only when stuck or wiring |
 | `MARKER-GUARD-HOOK.md` | wiring the phase-marker block hook                                                |
 | `COMMIT-GUARD-HOOK.md` | wiring the commit covenant block hook                                             |
+| `POST-COMMIT-HOOK.md`  | wiring the post-commit back-pressure hook (scoped tests after each commit)        |
 | `BACKPROP.md`          | test went red after impl; deciding code bug vs spec bug vs missing invariant      |
 | `DRIFT-CHECK.md`       | at phase boundary, or before closeout                                             |
 | `OUTPUT-REBASELINE.md` | `git diff` shows snapshot / golden / openapi / schema dump file                   |
