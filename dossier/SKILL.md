@@ -10,25 +10,17 @@ description: >
 license: MIT
 metadata:
   author: mrugesh
-  version: "0.4.0"
+  version: 0.4.0
 allowed-tools: Bash(git:*) Bash(mkdir:*) Bash(ls:*) Bash(grep:*) Bash(find:*) Bash(sort:*) Bash(head:*) Bash(ln:*) Bash(sed:*) Bash(bash:*) Read Write Edit
 ---
 
 # dossier
 
-Full protocol for multi-phase engineering work. Dossier keeps
-agent-facing plan, compact phase spec, audit ledger, selected lens, and
-phase closeout inside `.scratchpad/dossier/`. Does **not** write to
-`.changeset/`; package-manager changesets and public release notes are
-external artifacts needing explicit user approval.
+Full protocol for multi-phase engineering work. Dossier keeps agent-facing plan, compact phase spec, audit ledger, selected lens, and phase closeout inside `.scratchpad/dossier/`. Does **not** write to `.changeset/`; package-manager changesets and public release notes are external artifacts needing explicit user approval.
 
 ## Runtime
 
-Init script needs Bash 4+. Markdown templates work in Claude Code,
-OpenCode, Codex via runtime adapters. Claude Code gets native
-`TaskCreate` / `TaskUpdate` / `TaskList` and `ScheduleWakeup`; other
-runtimes map same primitives to own task and shell/session
-tools.
+Init script needs Bash 4+. Markdown templates work in Claude Code, OpenCode, Codex via runtime adapters. Claude Code gets native `TaskCreate` / `TaskUpdate` / `TaskList` and `ScheduleWakeup`; other runtimes map same primitives to own task and shell/session tools.
 
 ## When to use
 
@@ -41,27 +33,17 @@ Trigger when:
 - Session crosses compact / handoff, state must reconstruct from disk.
 - User explicitly says "open a dossier", "phase plan", "audit ledger", "TDD this initiative", "scaffold dossier", "close the dossier".
 
-Skip for one-shot edits, isolated bug fixes, pure research,
-or anything where one normal commit enough.
+Skip for one-shot edits, isolated bug fixes, pure research, or anything where one normal commit enough.
 
 ## Router
 
-Pick a starting point per axis. None of these lock for the whole
-initiative — flavor and lens swap freely between phases when work shape
-shifts. Runtime adapter usually stays fixed (it's the host), but is
-swappable on handoff.
+Pick a starting point per axis. None of these lock for the whole initiative — flavor and lens swap freely between phases when work shape shifts. Runtime adapter usually stays fixed (it's the host), but is swappable on handoff.
 
-1. **Flavor** — read `references/FLAVORS.md`, choose:
-   `feature-wave`, `bug-sweep`, `migration`, `refactor-wave`,
-   `release-hardening`, or `rescue`. Default `feature-wave`.
-2. **Runtime adapter** — read `references/RUNTIME-ADAPTERS.md`, map
-   shared primitives (`task_start`, `task_done`, `long_command`,
-   `resume_after_wait`, etc.) to Claude Code, OpenCode, or Codex.
-3. **Lens** — load at most one file from `lenses/` for dominant
-   stack. If phase spans stacks, name secondary gates in `PLAN.md`.
+1. **Flavor** — read `references/FLAVORS.md`, choose: `feature-wave`, `bug-sweep`, `migration`, `refactor-wave`, `release-hardening`, or `rescue`. Default `feature-wave`.
+1. **Runtime adapter** — read `references/RUNTIME-ADAPTERS.md`, map shared primitives (`task_start`, `task_done`, `long_command`, `resume_after_wait`, etc.) to Claude Code, OpenCode, or Codex.
+1. **Lens** — load at most one file from `lenses/` for dominant stack. If phase spans stacks, name secondary gates in `PLAN.md`.
 
-Then read `references/CORE.md`. Load deeper references only when
-phase needs them.
+Then read `references/CORE.md`. Load deeper references only when phase needs them.
 
 ## Init
 
@@ -85,16 +67,15 @@ Script creates:
     TEMPLATE.md
 ```
 
-`.scratchpad/` gitignored. `closeout/` internal theater tooling.
-Do not use `.changeset/` for dossier internals.
+`.scratchpad/` gitignored. `closeout/` internal theater tooling. Do not use `.changeset/` for dossier internals.
 
 ## Full workflow
 
 1. Fill `PLAN.md`: flavor, phases, locked decisions, expected commit count.
-2. Fill `SPEC.md`: compact `§G`, `§C`, `§I`, `§V`, `§T`, `§B` state.
-3. Seed `AUDIT.md`: known B-ids/C-ids, severity, reproduction signal.
-4. Read selected `LENS.md`, if present.
-5. Per planned commit:
+1. Fill `SPEC.md`: compact `§G`, `§C`, `§I`, `§V`, `§T`, `§B` state.
+1. Seed `AUDIT.md`: known B-ids/C-ids, severity, reproduction signal.
+1. Read selected `LENS.md`, if present.
+1. Per planned commit:
    - `task_start`
    - flip active `§T` row from `.` to `~`
    - read relevant plan/spec/audit/lens context
@@ -103,7 +84,7 @@ Do not use `.changeset/` for dossier internals.
    - use `references/BG-LOOP.md` for long commands via runtime adapter
    - flip active `§T` row from `~` to `x`
    - `task_done`
-6. At phase boundary:
+1. At phase boundary:
    - run `references/DRIFT-CHECK.md`
    - update `AUDIT.md` finding table
    - confirm runtime task list zero in-flight work
@@ -111,25 +92,13 @@ Do not use `.changeset/` for dossier internals.
 
 ## Autonomy
 
-Within a phase, commit each covenant task autonomously. Rationale lives
-in the commit subject (`type(scope): subject`); no out-of-band approval
-between commits. Pause only at phase boundary or on covenant violation.
-User-owned ops (push, PR, publish, deploy, package-changeset export)
-stay user-owned per `references/COVENANT.md` negative table — stated
-once, not re-litigated per task.
+Within a phase, commit each covenant task autonomously. Rationale lives in the commit subject (`type(scope): subject`); no out-of-band approval between commits. Pause only at phase boundary or on covenant violation. User-owned ops (push, PR, publish, deploy, package-changeset export) stay user-owned per `references/COVENANT.md` negative table — stated once, not re-litigated per task.
 
 ## Source hygiene
 
-Source files stay phase-agnostic. **Never** write phase, stage, or
-audit-id markers in code or test comments — `// Phase 1:`,
-`// Step N:`, `// Stage 3`, `// V11 (Phase 3 / A7):`, `// PH3-B7`.
-Phase / audit tracking lives in `.scratchpad/dossier/PLAN.md` and
-`AUDIT.md §B` only. Comments in source explain _why_ (workaround refs,
-non-obvious invariants, upstream-bug links), not _which phase_.
+Source files stay phase-agnostic. **Never** write phase, stage, or audit-id markers in code or test comments — `// Phase 1:`, `// Step N:`, `// Stage 3`, `// V11 (Phase 3 / A7):`, `// PH3-B7`. Phase / audit tracking lives in `.scratchpad/dossier/PLAN.md` and `AUDIT.md §B` only. Comments in source explain _why_ (workaround refs, non-obvious invariants, upstream-bug links), not _which phase_.
 
-Optional `PreToolUse` enforcement: `references/MARKER-GUARD-HOOK.md`
-wires `scripts/marker-guard.py` to `Edit|Write|MultiEdit` and blocks
-markers before they land.
+Optional `PreToolUse` enforcement: `references/MARKER-GUARD-HOOK.md` wires `scripts/marker-guard.py` to `Edit|Write|MultiEdit` and blocks markers before they land.
 
 ## References
 
@@ -143,6 +112,7 @@ Load on demand:
 - `references/TDD-EXAMPLES.md` — stack examples; load only when needed.
 - `references/TDD-GATE-HOOK.md` — optional Claude Code hook setup.
 - `references/MARKER-GUARD-HOOK.md` — optional phase-marker block hook.
+- `references/COMMIT-GUARD-HOOK.md` — optional commit covenant block hook.
 - `references/BACKPROP.md` — failed verification / bug -> `§B` + `§V`.
 - `references/DRIFT-CHECK.md` — read-only spec / code drift report.
 - `references/OUTPUT-REBASELINE.md` — golden / snapshot / contract rebaseline order.
@@ -169,7 +139,7 @@ Lenses:
 When dossier closes, final message must include:
 
 1. Path to internal closeout note under `.scratchpad/dossier/closeout/`.
-2. Confirm `AUDIT.md` finding table current.
-3. Confirm runtime task state shows zero in-flight work.
-4. Confirm final drift check ran or explicitly skipped.
-5. User-owned ops still pending (push / PR / publish / deploy / changeset export) — list once, no chatter.
+1. Confirm `AUDIT.md` finding table current.
+1. Confirm runtime task state shows zero in-flight work.
+1. Confirm final drift check ran or explicitly skipped.
+1. User-owned ops still pending (push / PR / publish / deploy / changeset export) — list once, no chatter.
