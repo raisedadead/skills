@@ -155,4 +155,49 @@ fi
 out="$(bash "$INIT" --help 2>/dev/null)"
 grep -q -i 'usage' <<<"$out" || fail "--help should print usage"
 
+# 18. Lessons brought forward via --lessons-home.
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/dossier-init.XXXXXX")"
+home="$tmp/global-lessons.md"
+# Seed lessons file using lesson.sh so format matches the writer.
+bash "$SCRIPT_DIR/lesson.sh" --lessons-home "$home" "first lesson" >/dev/null
+bash "$SCRIPT_DIR/lesson.sh" --lessons-home "$home" "second lesson" >/dev/null
+bash "$SCRIPT_DIR/lesson.sh" --lessons-home "$home" "third lesson" >/dev/null
+bash "$INIT" --phase 1 --flavor feature-wave --lens generic --lessons-home "$home" "$tmp" >/dev/null
+spec="$tmp/.scratchpad/dossier/SPEC.md"
+grep -q '^## Lessons brought forward' "$spec" || fail "SPEC should carry lessons section"
+grep -q 'first lesson' "$spec" || fail "L1 text should appear"
+grep -q 'second lesson' "$spec" || fail "L2 text should appear"
+grep -q 'third lesson' "$spec" || fail "L3 text should appear"
+rm -rf "$tmp"
+
+# 19. Pre-existing .scratchpad/dossier/.lessons.md surfaces automatically.
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/dossier-init.XXXXXX")"
+mkdir -p "$tmp/.scratchpad/dossier"
+bash "$SCRIPT_DIR/lesson.sh" --root "$tmp" "project-local lesson" >/dev/null
+bash "$INIT" --phase 1 --flavor feature-wave --lens generic "$tmp" >/dev/null
+spec="$tmp/.scratchpad/dossier/SPEC.md"
+grep -q '^## Lessons brought forward' "$spec" || fail "SPEC should pick up local .lessons.md"
+grep -q 'project-local lesson' "$spec" || fail "local lesson text should appear"
+rm -rf "$tmp"
+
+# 20. No lessons file -> no section in SPEC.
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/dossier-init.XXXXXX")"
+bash "$INIT" --phase 1 --flavor feature-wave --lens generic "$tmp" >/dev/null
+spec="$tmp/.scratchpad/dossier/SPEC.md"
+grep -q '^## Lessons brought forward' "$spec" && fail "absent lessons should not add a section"
+rm -rf "$tmp"
+
+# 21. Cap at most 5 entries by default.
+tmp="$(mktemp -d "${TMPDIR:-/tmp}/dossier-init.XXXXXX")"
+home="$tmp/lessons.md"
+for i in 1 2 3 4 5 6 7; do
+	bash "$SCRIPT_DIR/lesson.sh" --lessons-home "$home" "lesson number $i" >/dev/null
+done
+bash "$INIT" --phase 1 --flavor feature-wave --lens generic --lessons-home "$home" "$tmp" >/dev/null
+spec="$tmp/.scratchpad/dossier/SPEC.md"
+# Count occurrences of 'lesson number' in SPEC after the Lessons header.
+n=$(awk '/^## Lessons brought forward/{cap=1; next} cap && /lesson number/{n++} END{print n+0}' "$spec")
+[[ "$n" -eq 5 ]] || fail "default cap should be 5 (got $n)"
+rm -rf "$tmp"
+
 printf 'ok\n'

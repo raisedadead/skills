@@ -34,6 +34,8 @@ PHASES=1
 TASKS=0
 FINDINGS=0
 LEGACY=0
+LESSONS_HOME=""
+LESSONS_RECENT=5
 ROOT="."
 
 while [[ $# -gt 0 ]]; do
@@ -65,6 +67,14 @@ while [[ $# -gt 0 ]]; do
 	--legacy)
 		LEGACY=1
 		shift
+		;;
+	--lessons-home)
+		LESSONS_HOME="${2:?--lessons-home requires a value}"
+		shift 2
+		;;
+	--lessons-recent)
+		LESSONS_RECENT="${2:?--lessons-recent requires a value}"
+		shift 2
 		;;
 	-h | --help)
 		sed -n '2,26p' "$0"
@@ -228,6 +238,37 @@ if [[ -n "${LENS_FILE:-}" ]]; then
 	else
 		ln -s "$LENS_SRC" "$LENS_TARGET"
 		printf "link: %s -> %s\n" "$LENS_TARGET" "$LENS_SRC"
+	fi
+fi
+
+# Bring forward recent lessons (per-project default, optional kernel-wide home).
+SPEC_TARGET="$DOSSIER_DIR/SPEC.md"
+lessons_file=""
+if [[ -n "$LESSONS_HOME" && -f "$LESSONS_HOME" ]]; then
+	lessons_file="$LESSONS_HOME"
+elif [[ -f "$DOSSIER_DIR/.lessons.md" ]]; then
+	lessons_file="$DOSSIER_DIR/.lessons.md"
+fi
+
+if [[ -n "$lessons_file" && -f "$SPEC_TARGET" ]]; then
+	# Last N lesson rows, oldest-first to newest-first stays as on disk.
+	lesson_rows=$(grep -E '^\| L[0-9]+ \|' "$lessons_file" | tail -n "$LESSONS_RECENT" || true)
+	if [[ -n "$lesson_rows" ]] && ! grep -q '^## Lessons brought forward' "$SPEC_TARGET"; then
+		# shellcheck disable=SC2016 # backticks are literal markdown code spans
+		{
+			printf '\n## Lessons brought forward\n\n'
+			printf 'Recent observations from `%s`. Promote any to a `C<n>` row in §C\n' "$lessons_file"
+			printf 'if the lesson should constrain this phase. Retire stale entries\n'
+			printf 'with `bash <skill-dir>/scripts/lesson.sh --retire <Lid>`.\n\n'
+			while IFS= read -r row; do
+				# Extract id and text from `| L<n> | date | text |`
+				id=$(awk -F'|' '{gsub(/^ +| +$/, "", $2); print $2}' <<<"$row")
+				text=$(awk -F'|' '{gsub(/^ +| +$/, "", $4); print $4}' <<<"$row")
+				printf -- '- [ ] %s — %s\n' "$id" "$text"
+			done <<<"$lesson_rows"
+		} >>"$SPEC_TARGET"
+		n=$(printf '%s\n' "$lesson_rows" | wc -l | tr -d ' ')
+		printf 'lessons: surfaced %s entries into SPEC.md\n' "$n"
 	fi
 fi
 
