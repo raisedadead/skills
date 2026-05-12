@@ -149,6 +149,24 @@ out="$(bash "$DRIFT" "$tmp" 2>/dev/null)"
 grep -q '^phase markers: 1' <<<"$out" || fail "no-dossier mode should still grep markers"
 rm -rf "$tmp"
 
+# 13b. Inside a git repo, untracked WIP files are also scanned.
+tmp="$(mkfix)"
+(
+	cd "$tmp"
+	git init -q
+	git config user.email t@t
+	git config user.name t
+	echo a >a.txt
+	git add a.txt
+	git -c commit.gpgsign=false commit -q -m "init"
+)
+# Create an untracked WIP file carrying a phase marker. It must be caught.
+printf '// Phase 1: bootstrap router\n' >"$tmp/wip.ts"
+out="$(bash "$DRIFT" "$tmp" 2>/dev/null)"
+grep -q '^phase markers: 1' <<<"$out" || fail "untracked WIP marker should be caught"
+grep -q 'wip.ts' <<<"$out" || fail "untracked file path should appear"
+rm -rf "$tmp"
+
 # 14. Unknown flag -> exit 2.
 if bash "$DRIFT" --bogus 2>/dev/null; then
 	fail "unknown flag should error"

@@ -57,7 +57,9 @@ PATTERN='^[[:space:]]*(//+|#+|--|/\*+|\*[^/]|<!--|;)[[:space:]].*((phase|stage|s
 list_candidate_files() {
 	local raw
 	if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
-		raw=$(git -C "$ROOT" ls-files)
+		# Tracked + untracked-not-ignored. Untracked WIP is exactly where
+		# phase markers leak in, so don't restrict to ls-files alone.
+		raw=$(git -C "$ROOT" ls-files --cached --others --exclude-standard)
 	else
 		raw=$(cd "$ROOT" && find . -type f \
 			-not -path './.git/*' \
