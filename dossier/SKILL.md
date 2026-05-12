@@ -79,7 +79,7 @@ Script creates:
    - `task_start`
    - flip active `§T` row from `.` to `~`
    - read relevant plan/spec/audit/lens context
-   - run `references/TDD-ROUND.md`: vertical RED -> GREEN -> adjacent check -> COMMIT
+   - run `references/TDD.md`: vertical RED -> GREEN -> adjacent check -> COMMIT
    - on failed verification, run `references/BACKPROP.md`
    - use `references/BG-LOOP.md` for long commands via runtime adapter
    - flip active `§T` row from `~` to `x`
@@ -102,26 +102,26 @@ Optional `PreToolUse` enforcement: `references/MARKER-GUARD-HOOK.md` wires `scri
 
 ## References
 
-Load on demand:
+Progressive disclosure — each reference names the symptom that should trigger loading it. Do not pre-load on init.
 
-- `references/CORE.md` — shared architecture, invariants, lifecycle.
-- `references/FLAVORS.md` — full protocol presets.
-- `references/RUNTIME-ADAPTERS.md` — Claude Code / OpenCode / Codex primitive mapping.
-- `references/COVENANT.md` — per-task positive + negative rule list.
-- `references/TDD-ROUND.md` — RED -> GREEN -> COMMIT sequence.
-- `references/TDD-EXAMPLES.md` — stack examples; load only when needed.
-- `references/TDD-GATE-HOOK.md` — optional Claude Code hook setup.
-- `references/MARKER-GUARD-HOOK.md` — optional phase-marker block hook.
-- `references/COMMIT-GUARD-HOOK.md` — optional commit covenant block hook.
-- `references/BACKPROP.md` — failed verification / bug -> `§B` + `§V`.
-- `references/DRIFT-CHECK.md` — read-only spec / code drift report.
-- `references/OUTPUT-REBASELINE.md` — golden / snapshot / contract rebaseline order.
-- `references/META-GATE.md` — structural invariant tests.
-- `references/BG-LOOP.md` — long-command pacing across runtimes.
-- `references/PROBE-PATTERN.md` — throwaway runtime probes.
-- `references/HANDOFF.md` — compact / session recovery.
-- `references/HOOK-RESPONSES.md` — Claude Code hook responses.
-- `references/FAILURE-MODES.md` — stack-neutral footguns.
+| ref                    | load when                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------- |
+| `CORE.md`              | first read of a fresh dossier — lifecycle, primitives, non-negotiables            |
+| `FLAVORS.md`           | picking the starting flavor, or re-flavoring at a phase boundary                  |
+| `RUNTIME-ADAPTERS.md`  | first read, or handoff to a different host runtime                                |
+| `COVENANT.md`          | first read; revisit when a covenant violation surfaces                            |
+| `TDD.md`               | every task; load deferred Examples / Gate-hook sections only when stuck or wiring |
+| `MARKER-GUARD-HOOK.md` | wiring the phase-marker block hook                                                |
+| `COMMIT-GUARD-HOOK.md` | wiring the commit covenant block hook                                             |
+| `BACKPROP.md`          | test went red after impl; deciding code bug vs spec bug vs missing invariant      |
+| `DRIFT-CHECK.md`       | at phase boundary, or before closeout                                             |
+| `OUTPUT-REBASELINE.md` | `git diff` shows snapshot / golden / openapi / schema dump file                   |
+| `META-GATE.md`         | impl edit is config / threshold / structural — needs sibling test                 |
+| `BG-LOOP.md`           | long command expected to exceed ~30s                                              |
+| `PROBE-PATTERN.md`     | need a throwaway probe to check runtime state                                     |
+| `HANDOFF.md`           | session crosses compact / interrupted / unclear branch state                      |
+| `HOOK-RESPONSES.md`    | a runtime hook emitted a literal message and you need to interpret it             |
+| `FAILURE-MODES.md`     | stuck on a known footgun; want the stack-neutral failure catalogue                |
 
 Lenses:
 
