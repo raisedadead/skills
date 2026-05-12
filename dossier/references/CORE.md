@@ -1,26 +1,25 @@
 # Core protocol
 
-Dossier full-protocol only. Internal scratchpad theater for
-agents coordinating multi-phase work. Stays standalone: no external
-process framework, no public release notes, no package-manager
-changesets unless user explicit ask export.
+Dossier full-protocol only. Internal scratchpad theater for agents coordinating multi-phase work. Stays standalone: no external process framework, no public release notes, no package-manager changesets unless user explicit ask export.
 
 ## Scratchpad layout
 
+Tiered. The minimal shape is just `SPEC.md` plus `closeout/`. Heavier flavors (migration / release-hardening) and explicit escalators (`--phases >1`, `--tasks >8`, `--findings >5`, `--legacy`) materialize the rest.
+
 ```text
 .scratchpad/dossier/
-  PLAN.md
-  SPEC.md              # compact active state: §G/§C/§I/§V/§T/§B
-  AUDIT.md             # finding ledger with optional detail sections
+  SPEC.md              # compact active state: §G/§C/§I/§V/§T/§B (always)
+  PLAN.md              # narrative phase plan (escalated)
+  AUDIT.md             # finding ledger with optional detail sections (escalated)
   LENS.md              # optional symlink/copy from lenses/
   closeout/
-    TEMPLATE.md
+    TEMPLATE.md        # rendered for heavy flavors or --legacy
     phase-<N>-<slug>.md
 ```
 
-`.scratchpad/` gitignored. Closeout note = internal phase
-record. Do not write dossier internals to `.changeset/`; that namespace
-belong to release tooling.
+Grow a tiered dossier later via `dossier-promote.sh --plan|--audit`.
+
+`.scratchpad/` gitignored. Closeout note = internal phase record. Do not write dossier internals to `.changeset/`; that namespace belongs to release tooling.
 
 ## Domain awareness
 
@@ -29,10 +28,7 @@ Before plan or edit, silently read project domain docs when exist:
 - `CONTEXT.md` at repo root, or `CONTEXT-MAP.md` for multiple contexts.
 - Relevant ADRs under `docs/adr/` or context-local `docs/adr/`.
 
-Use project vocabulary from those files in `PLAN.md`, `SPEC.md`,
-`AUDIT.md`, test names, commit subjects, closeout notes. If files
-not exist, continue without creating. Dossier only records
-phase state; durable product/domain docs outside its scratchpad.
+Use project vocabulary from those files in `PLAN.md`, `SPEC.md`, `AUDIT.md`, test names, commit subjects, closeout notes. If files not exist, continue without creating. Dossier only records phase state; durable product/domain docs outside its scratchpad.
 
 ## Compact active state
 
@@ -47,14 +43,11 @@ phase state; durable product/domain docs outside its scratchpad.
 | `§T`    | Tasks: active table, status `.` todo / `~` wip / `x` done.   |
 | `§B`    | Bugs/findings: compact backprop log, synced from `AUDIT.md`. |
 
-`PLAN.md` stays narrative and phase-shaped. `SPEC.md §T` = compact
-active dashboard. `AUDIT.md` carries enough evidence for findings that
-cannot fit cleanly in `§B` table.
+`PLAN.md` stays narrative and phase-shaped. `SPEC.md §T` = compact active dashboard. `AUDIT.md` carries enough evidence for findings that cannot fit cleanly in `§B` table.
 
 ## Shared primitives
 
-All core docs use runtime-neutral primitives. Selected runtime
-adapter map them to real tools.
+All core docs use runtime-neutral primitives. Selected runtime adapter map them to real tools.
 
 | Primitive           | Meaning                                                     |
 | ------------------- | ----------------------------------------------------------- |
@@ -72,47 +65,30 @@ adapter map them to real tools.
 
 ## Lifecycle
 
-0. **Premise check.** Before touching `PLAN.md`, list every assumption
-   the plan rests on — file/path exists, library exposes method `X`,
-   schema has column `Y`, env var `Z` is set, doc claim `K` is current.
-   Verify each empirically (`ls`, `Read`, `grep`, narrow probe, schema
-   query). Record gaps as `C<n>` rows in `AUDIT.md`. Five minutes of
-   probing prevents three hours of debugging the wrong tree. Skip only
-   if every assumption is already covered by a recent verified C-row.
-1. Pick a starting flavor, runtime adapter, lens. Re-flavor between
-   phases without ceremony if the work shape shifts; lens swap is fine
-   when secondary stack dominates a phase.
-2. Initialize `.scratchpad/dossier/`.
-3. Fill `PLAN.md`: phases, locked decisions, expected outcome per
-   sub-phase (commit counts are estimates, not gates).
-4. Fill `SPEC.md`: `§G`, `§C`, `§I`, `§V`, `§T`, `§B`.
-5. Seed `AUDIT.md`: B-ids/C-ids, severity, symptom, reproduction signal.
-6. Every planned commit: `task_start`, flip `§T` to `~`, TDD round,
-   adjacent check, `commit_paths`, flip `§T` to `x`, `task_done`.
-7. On failed verification: run `BACKPROP.md` before retry.
-8. At phase boundary: run `DRIFT-CHECK.md`, update `AUDIT.md`, confirm
-   `task_list` zero in-flight work, write closeout note.
+0. **Premise check.** Before touching `PLAN.md`, list every assumption the plan rests on — file/path exists, library exposes method `X`, schema has column `Y`, env var `Z` is set, doc claim `K` is current. Verify each empirically (`ls`, `Read`, `grep`, narrow probe, schema query). Record gaps as `C<n>` rows in `AUDIT.md`. Five minutes of probing prevents three hours of debugging the wrong tree. Skip only if every assumption is already covered by a recent verified C-row.
+1. Pick a starting flavor, runtime adapter, lens. Re-flavor between phases without ceremony if the work shape shifts; lens swap is fine when secondary stack dominates a phase.
+1. Initialize `.scratchpad/dossier/`.
+1. Fill `PLAN.md`: phases, locked decisions, expected outcome per sub-phase (commit counts are estimates, not gates).
+1. Fill `SPEC.md`: `§G`, `§C`, `§I`, `§V`, `§T`, `§B`.
+1. Seed `AUDIT.md`: B-ids/C-ids, severity, symptom, reproduction signal.
+1. Every planned commit: `task_start`, flip `§T` to `~`, TDD round, adjacent check, `commit_paths`, flip `§T` to `x`, `task_done`.
+1. On failed verification: run `BACKPROP.md` before retry.
+1. At phase boundary: run `DRIFT-CHECK.md`, update `AUDIT.md`, confirm `task_list` zero in-flight work, write closeout note.
 
 ## Non-negotiables
 
-- One commit per task unless `PLAN.md` explicit record exception
-  before work start.
-- Commit autonomously per task; do not pause for approval between
-  covenant commits. User-owned ops (push, PR, publish, deploy) are a
-  one-line entry in `COVENANT.md` negative table, not a per-task gate.
+- One commit per task unless `PLAN.md` explicit record exception before work start.
+- Commit autonomously per task; do not pause for approval between covenant commits. User-owned ops (push, PR, publish, deploy) are a one-line entry in `COVENANT.md` negative table, not a per-task gate.
 - No `git add .` or `git add -A`; stage explicit paths only.
-- Every implementation/config/contract change has sibling test,
-  meta-gate, or recorded-output rebaseline in same commit.
-- Tasks = vertical slices: one behavior or outcome through public
-  interface, not one layer at a time.
+- Every implementation/config/contract change has sibling test, meta-gate, or recorded-output rebaseline in same commit.
+- Tasks = vertical slices: one behavior or outcome through public interface, not one layer at a time.
 - Rebaseline outputs only after read unbaselined diff.
 - Long commands use selected adapter; never spin with shell `sleep`.
 - Closeout stays internal unless user approve export.
 
 ## Closeout
 
-Write `.scratchpad/dossier/closeout/phase-<N>-<slug>.md` at phase close.
-Must name:
+Write `.scratchpad/dossier/closeout/phase-<N>-<slug>.md` at phase close. Must name:
 
 - flavor, lens, phase
 - commits landed

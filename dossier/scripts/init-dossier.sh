@@ -3,24 +3,37 @@
 #
 # Usage:
 #   bash init-dossier.sh \
-#     --phase <number> \
+#     --phase <N> \
 #     --flavor <feature-wave|bug-sweep|migration|refactor-wave|release-hardening|rescue> \
 #     --lens <web|backend|cli|lib|data|infra|mobile|ml|generic> \
+#     [--phases <N>] [--tasks <N>] [--findings <N>] [--legacy] \
 #     [<project-root>]
 #
-# Idempotent. Re-running does not overwrite existing files.
+# Tiered open. The default footprint is small:
 #
-# Flags:
-#   --phase <N>            Phase number (substituted into <PHASE> placeholders).
-#   --flavor <name>        Full dossier flavor preset.
-#   --lens <name>          Stack lens to symlink as .scratchpad/dossier/LENS.md.
-#                          'generic' or omit -> no lens loaded.
+#   - SPEC.md + closeout/ — always created.
+#   - PLAN.md            — created when --phases > 1, --tasks > 8, the
+#                          flavor is migration / release-hardening, or
+#                          --legacy is set.
+#   - AUDIT.md           — created when --findings > 5, the flavor is
+#                          bug-sweep / migration / release-hardening, or
+#                          --legacy is set.
+#   - closeout/TEMPLATE  — rendered for migration / release-hardening
+#                          (or --legacy).
+#   - LENS.md            — symlinked when --lens != generic.
+#
+# Idempotent. Re-running does not overwrite existing files. Grow a
+# tiered dossier later with `dossier-promote.sh --plan|--audit`.
 
 set -euo pipefail
 
 PHASE="1"
 FLAVOR="feature-wave"
 LENS="generic"
+PHASES=1
+TASKS=0
+FINDINGS=0
+LEGACY=0
 ROOT="."
 
 while [[ $# -gt 0 ]]; do
@@ -37,8 +50,24 @@ while [[ $# -gt 0 ]]; do
 		LENS="${2:?--lens requires a value}"
 		shift 2
 		;;
+	--phases)
+		PHASES="${2:?--phases requires a value}"
+		shift 2
+		;;
+	--tasks)
+		TASKS="${2:?--tasks requires a value}"
+		shift 2
+		;;
+	--findings)
+		FINDINGS="${2:?--findings requires a value}"
+		shift 2
+		;;
+	--legacy)
+		LEGACY=1
+		shift
+		;;
 	-h | --help)
-		sed -n '2,17p' "$0"
+		sed -n '2,26p' "$0"
 		exit 0
 		;;
 	--*)
@@ -85,6 +114,34 @@ if [[ ! -f "$GITIGNORE" ]] || ! grep -qF ".scratchpad/" "$GITIGNORE"; then
 	printf "added .scratchpad/ to %s\n" "$GITIGNORE"
 fi
 
+# Decide which ledgers to materialize based on flavor + escalators.
+want_plan=0
+want_audit=0
+want_closeout=0
+
+case "$FLAVOR" in
+migration | release-hardening)
+	want_plan=1
+	want_audit=1
+	want_closeout=1
+	;;
+bug-sweep)
+	want_audit=1
+	;;
+esac
+
+if [[ "$PHASES" -gt 1 || "$TASKS" -gt 8 ]]; then
+	want_plan=1
+fi
+if [[ "$FINDINGS" -gt 5 ]]; then
+	want_audit=1
+fi
+if [[ "$LEGACY" -eq 1 ]]; then
+	want_plan=1
+	want_audit=1
+	want_closeout=1
+fi
+
 render_template() {
 	local template="$1"
 	local target="$2"
@@ -97,46 +154,39 @@ render_template() {
 created=0
 skipped=0
 
-# Drop SPEC and AUDIT from templates if absent.
-for f in SPEC AUDIT; do
-	TARGET="$DOSSIER_DIR/${f}.md"
-	TMPL="$TEMPLATES_DIR/${f}.md.tmpl"
-	if [[ ! -f "$TMPL" ]]; then
-		printf "warn: template missing: %s\n" "$TMPL" >&2
-		continue
-	fi
-	if [[ -f "$TARGET" ]]; then
-		printf "skip: %s already exists\n" "$TARGET"
+render_if_wanted() {
+	# $1 = name (no extension), $2 = wanted-flag (0/1)
+	local name="$1" wanted="$2"
+	local target="$DOSSIER_DIR/${name}.md"
+	local tmpl="$TEMPLATES_DIR/${name}.md.tmpl"
+	if [[ "$wanted" -eq 0 ]]; then
+		printf "skip: %s (not requested by flavor / escalators)\n" "$target"
 		skipped=$((skipped + 1))
-		continue
+		return
 	fi
-	render_template "$TMPL" "$TARGET"
-	printf "create: %s\n" "$TARGET"
+	if [[ ! -f "$tmpl" ]]; then
+		printf "warn: template missing: %s\n" "$tmpl" >&2
+		return
+	fi
+	if [[ -f "$target" ]]; then
+		printf "skip: %s already exists\n" "$target"
+		skipped=$((skipped + 1))
+		return
+	fi
+	render_template "$tmpl" "$target"
+	printf "create: %s\n" "$target"
 	created=$((created + 1))
-done
+}
 
-# PLAN - drop the template if absent.
-PLAN_TARGET="$DOSSIER_DIR/PLAN.md"
-TMPL="$TEMPLATES_DIR/PLAN.md.tmpl"
-if [[ -f "$PLAN_TARGET" ]]; then
-	printf "skip: %s already exists\n" "$PLAN_TARGET"
-	skipped=$((skipped + 1))
-elif [[ -f "$TMPL" ]]; then
-	render_template "$TMPL" "$PLAN_TARGET"
-	printf "create: %s\n" "$PLAN_TARGET"
-	created=$((created + 1))
-fi
+# SPEC.md is always created.
+render_if_wanted SPEC 1
+render_if_wanted PLAN "$want_plan"
+render_if_wanted AUDIT "$want_audit"
 
-# Internal closeout template. Rendered eagerly only for flavors where every
-# phase ships a closeout note. Other flavors render on demand at phase close
-# (trivial phases ≤ 2 commits skip the note entirely — see PLAN.md.tmpl).
+# Internal closeout template.
 CLOSEOUT_TEMPLATE="$CLOSEOUT_DIR/TEMPLATE.md"
 TMPL="$TEMPLATES_DIR/CLOSEOUT.md.tmpl"
-case "$FLAVOR" in
-migration | release-hardening) RENDER_CLOSEOUT=1 ;;
-*) RENDER_CLOSEOUT=0 ;;
-esac
-if [[ "$RENDER_CLOSEOUT" -eq 0 ]]; then
+if [[ "$want_closeout" -eq 0 ]]; then
 	printf "skip: %s (flavor '%s' renders closeout on demand)\n" "$CLOSEOUT_TEMPLATE" "$FLAVOR"
 	skipped=$((skipped + 1))
 elif [[ -f "$CLOSEOUT_TEMPLATE" ]]; then
@@ -184,14 +234,27 @@ fi
 printf '\n'
 printf "dossier ready (phase %s, flavor %s, lens %s): created=%s skipped=%s\n" \
 	"$PHASE" "$FLAVOR" "$LENS" "$created" "$skipped"
+
+# Footer guidance — adapt to what was actually rendered.
 printf '\n'
 printf "next:\n"
-printf "  1. edit  %s/PLAN.md   (lock decisions, list phases)\n" "$DOSSIER_DIR"
-printf "  2. fill  %s/SPEC.md   (§G/§C/§I/§V/§T/§B)\n" "$DOSSIER_DIR"
-printf "  3. seed  %s/AUDIT.md  (B1, B2, ... known findings)\n" "$DOSSIER_DIR"
-closeout_step=4
-if [[ -n "${LENS_FILE:-}" ]]; then
-	printf "  4. read  %s/LENS.md   (stack-specific gates + footguns)\n" "$DOSSIER_DIR"
-	closeout_step=5
+step=1
+printf "  %s. fill  %s/SPEC.md   (§G/§C/§I/§V/§T/§B)\n" "$step" "$DOSSIER_DIR"
+step=$((step + 1))
+if [[ "$want_plan" -eq 1 ]]; then
+	printf "  %s. edit  %s/PLAN.md   (lock decisions, list phases)\n" "$step" "$DOSSIER_DIR"
+	step=$((step + 1))
+else
+	printf "  -. (PLAN.md not created; if scope grows: bash dossier-promote.sh --plan)\n"
 fi
-printf "  %s. on close, write %s/phase-%s-{slug}.md\n" "$closeout_step" "$CLOSEOUT_DIR" "$PHASE"
+if [[ "$want_audit" -eq 1 ]]; then
+	printf "  %s. seed  %s/AUDIT.md  (B1, B2, ... known findings)\n" "$step" "$DOSSIER_DIR"
+	step=$((step + 1))
+else
+	printf "  -. (AUDIT.md not created; if findings exceed §B capacity: bash dossier-promote.sh --audit)\n"
+fi
+if [[ -n "${LENS_FILE:-}" ]]; then
+	printf "  %s. read  %s/LENS.md   (stack-specific gates + footguns)\n" "$step" "$DOSSIER_DIR"
+	step=$((step + 1))
+fi
+printf "  %s. on close, run bash close-phase.sh to render closeout note\n" "$step"

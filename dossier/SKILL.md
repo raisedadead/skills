@@ -52,20 +52,26 @@ bash <skill-dir>/scripts/init-dossier.sh \
   --phase <number> \
   --flavor <feature-wave|bug-sweep|migration|refactor-wave|release-hardening|rescue> \
   --lens <web|backend|cli|lib|data|infra|mobile|ml|generic> \
+  [--phases <N>] [--tasks <N>] [--findings <N>] [--legacy] \
   [<project-root>]
 ```
 
-Script creates:
+Tiered open. The default footprint is minimal:
 
-```text
-.scratchpad/dossier/
-  PLAN.md
-  AUDIT.md
-  SPEC.md
-  LENS.md              # optional symlink
-  closeout/
-    TEMPLATE.md
+| created always         | `SPEC.md`, `closeout/`                                                                                                 |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `PLAN.md` when         | `--phases > 1`, `--tasks > 8`, flavor ∈ `{migration, release-hardening}`, or `--legacy`                                |
+| `AUDIT.md` when        | `--findings > 5`, flavor ∈ `{bug-sweep, migration, release-hardening}`, or `--legacy`                                  |
+| `closeout/TEMPLATE.md` | flavor ∈ `{migration, release-hardening}` or `--legacy` (other flavors render the note on demand via `close-phase.sh`) |
+| `LENS.md`              | `--lens` is anything other than `generic`                                                                              |
+
+Grow a tiered dossier later with:
+
+```bash
+bash <skill-dir>/scripts/dossier-promote.sh --plan|--audit [<project-root>]
 ```
+
+`--legacy` preserves the pre-tiered 4-file shape if a project depends on the old layout. `.scratchpad/` is auto-added to `.gitignore`. `closeout/` is internal theater tooling. Do not use `.changeset/` for dossier internals.
 
 `.scratchpad/` gitignored. `closeout/` internal theater tooling. Do not use `.changeset/` for dossier internals.
 
