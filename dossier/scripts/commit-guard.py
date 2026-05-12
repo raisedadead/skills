@@ -173,8 +173,7 @@ def evaluate(subcmd: str, toks: list[str]) -> tuple[str, str] | None:
     if is_git_push(toks):
         return (
             "CG4",
-            "`git push` is user-owned. Stop after the commit; let the user "
-            "push.",
+            "`git push` is user-owned. Stop after the commit; let the user push.",
         )
     if is_gh_pr_create(toks):
         return (
