@@ -1,6 +1,6 @@
 # Commit examples — phase tails across stacks
 
-Deferred reference. Load only when the abstract rules in `COVENANT.md` need concrete shape. Each block below is one phase's commit tail across a different stack. Every commit bundles its sibling test + impl; subject ≤ 50 chars; no body; no emoji; no phase / bug tag in the message — `AUDIT.md §B` is the canonical ledger.
+Deferred reference. Load only when the abstract rules in `COVENANT.md` need concrete shape. Each block below is one phase's commit tail across a different stack. Every commit bundles its sibling test + impl; subject ≤ 50 chars; no body; no emoji; no phase / bug tag in the message — `SPEC.md §B` is the canonical ledger.
 
 ## Web frontend phase tail (PNG rebaseline + tokens)
 

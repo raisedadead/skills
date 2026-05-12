@@ -1,31 +1,29 @@
 # Drift check — read-only spec / code report
 
-Drift check diagnostic. Writes nothing. Finds real work,
-record in `AUDIT.md` or fix via normal TDD round.
+Drift check diagnostic. Writes nothing. Findings are real work — record them in `SPEC.md §B` (canonical) and/or expand under a detail section in `AUDIT.md`, or fix via a normal TDD round.
 
 ## Load
 
 Read:
 
 1. `.scratchpad/dossier/SPEC.md`
-2. `.scratchpad/dossier/AUDIT.md`
-3. `.scratchpad/dossier/PLAN.md`
-4. `.scratchpad/dossier/LENS.md`, if present
-5. Current git status + relevant code/tests
+1. `.scratchpad/dossier/AUDIT.md`
+1. `.scratchpad/dossier/PLAN.md`
+1. `.scratchpad/dossier/LENS.md`, if present
+1. Current git status + relevant code/tests
 
 ## Check `§V` invariants
 
 Each invariant:
 
 1. Translate to verifiable claim about code/tests.
-2. Locate file:line evidence.
-3. Classify:
+1. Locate file:line evidence.
+1. Classify:
    - **HOLD** — evidence supports.
    - **VIOLATE** — code/test contradicts.
    - **UNVERIFIABLE** — no good evidence.
 
-`UNVERIFIABLE` usually coverage gap. File/update finding
-instead of declaring phase clean.
+`UNVERIFIABLE` usually coverage gap. File/update finding instead of declaring phase clean.
 
 ## Check `§I` interfaces
 
@@ -36,8 +34,7 @@ Each surface:
 - **MISSING** — spec names surface absent from code.
 - **EXTRA** — code exposes relevant surface not in spec.
 
-Use lenses for stack-specific surfaces: routes, commands, exports,
-schemas, snapshots, IaC resources, model artifacts, screens.
+Use lenses for stack-specific surfaces: routes, commands, exports, schemas, snapshots, IaC resources, model artifacts, screens.
 
 ## Check `§T` task state
 
@@ -68,18 +65,15 @@ I.api DRIFT: POST /orders returns `{result}` not `{id}`. routes.ts:144
 T3 STALE: marked x, but no behavior test or code path found
 
 summary: 2 violate, 1 drift, 1 stale, 1 unverifiable
-next: update AUDIT.md, then TDD round or BACKPROP.md
+next: update SPEC.md §B, then TDD round or BACKPROP.md
 ```
 
 ## Remedies
 
-- **VIOLATE / DRIFT** — fix code or run `BACKPROP.md` if spec missed
-  recurrence class.
-- **MISSING** — add task in `§T` or amend `§I` if surface no
-  longer wanted.
+- **VIOLATE / DRIFT** — fix code or run `BACKPROP.md` if spec missed recurrence class.
+- **MISSING** — add task in `§T` or amend `§I` if surface no longer wanted.
 - **EXTRA** — document in `§I` or remove code.
 - **STALE** — reopen task or add missing evidence.
-- **UNVERIFIABLE** — add behavior test, meta-gate, or recorded-output
-  check.
+- **UNVERIFIABLE** — add behavior test, meta-gate, or recorded-output check.
 
 No edit files during drift check. End with report + next narrow action.

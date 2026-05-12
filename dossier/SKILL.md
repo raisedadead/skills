@@ -71,15 +71,19 @@ Grow a tiered dossier later with:
 bash <skill-dir>/scripts/dossier-promote.sh --plan|--audit [<project-root>]
 ```
 
-`--legacy` preserves the pre-tiered 4-file shape if a project depends on the old layout. `.scratchpad/` is auto-added to `.gitignore`. `closeout/` is internal theater tooling. Do not use `.changeset/` for dossier internals.
+Migrate an existing dossier that still has the legacy 8-column `AUDIT.md §B` into the new SPEC-canonical layout:
 
-`.scratchpad/` gitignored. `closeout/` internal theater tooling. Do not use `.changeset/` for dossier internals.
+```bash
+bash <skill-dir>/scripts/migrate-audit.sh [--dry-run] [<project-root>]
+```
+
+`--legacy` on init preserves the pre-tiered 4-file shape if a project depends on the old layout. `.scratchpad/` is auto-added to `.gitignore`. `closeout/` is internal theater tooling. Do not use `.changeset/` for dossier internals.
 
 ## Full workflow
 
-1. Fill `PLAN.md`: flavor, phases, locked decisions, expected commit count.
-1. Fill `SPEC.md`: compact `§G`, `§C`, `§I`, `§V`, `§T`, `§B` state.
-1. Seed `AUDIT.md`: known B-ids/C-ids, severity, reproduction signal.
+1. Fill `PLAN.md` (when present): flavor, phases, locked decisions, expected commit count.
+1. Fill `SPEC.md`: compact `§G`, `§C`, `§I`, `§V`, `§T`, `§B` state. `§B` is the canonical finding ledger; seed known B-ids / C-ids here.
+1. Add Detail sections in `AUDIT.md` (optional) only for findings that need more than a row — hypotheses, probes, before/after evidence.
 1. Read selected `LENS.md`, if present.
 1. Per planned commit:
    - `task_start`
@@ -92,7 +96,7 @@ bash <skill-dir>/scripts/dossier-promote.sh --plan|--audit [<project-root>]
    - `task_done`
 1. At phase boundary:
    - run `references/DRIFT-CHECK.md`
-   - update `AUDIT.md` finding table
+   - update `SPEC.md §B` finding ledger (canonical)
    - confirm runtime task list zero in-flight work
    - write `.scratchpad/dossier/closeout/phase-<N>-<slug>.md`
 
@@ -102,7 +106,7 @@ Within a phase, commit each covenant task autonomously. Rationale lives in the c
 
 ## Source hygiene
 
-Source files stay phase-agnostic. **Never** write phase, stage, or audit-id markers in code or test comments — `// Phase 1:`, `// Step N:`, `// Stage 3`, `// V11 (Phase 3 / A7):`, `// PH3-B7`. Phase / audit tracking lives in `.scratchpad/dossier/PLAN.md` and `AUDIT.md §B` only. Comments in source explain _why_ (workaround refs, non-obvious invariants, upstream-bug links), not _which phase_.
+Source files stay phase-agnostic. **Never** write phase, stage, or audit-id markers in code or test comments — `// Phase 1:`, `// Step N:`, `// Stage 3`, `// V11 (Phase 3 / A7):`, `// PH3-B7`. Phase / audit tracking lives in `.scratchpad/dossier/PLAN.md` and `SPEC.md §B` only. Comments in source explain _why_ (workaround refs, non-obvious invariants, upstream-bug links), not _which phase_.
 
 Optional `PreToolUse` enforcement: `references/MARKER-GUARD-HOOK.md` wires `scripts/marker-guard.py` to `Edit|Write|MultiEdit` and blocks markers before they land.
 

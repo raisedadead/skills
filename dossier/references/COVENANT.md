@@ -12,13 +12,13 @@ Rules every commit in phase obeys. Project-tunable in `.scratchpad/dossier/SPEC.
   - `type` ∈ `feat` / `fix` / `test` / `chore` / `docs` / `refactor` / `perf` / `build` / `ci`
   - `scope` = project unit — package / service / module / surface (`api`, `worker`, `cli`, `migration`, `infra`, `evals`, etc.)
   - `subject` imperative mood, ≤ 50 chars
-  - No phase/bug suffix in commit message. Phase tracking lives in `AUDIT.md §B` only.
+  - No phase/bug suffix in commit message. Phase tracking lives in `SPEC.md §B` only.
 - **Sibling test in `git diff`.** PreToolUse TDD gate (`scripts/tdd-gate.py`) blocks Edit on impl files when no sibling test/evidence exists in current worktree. Write failing test first; commit together with impl.
 - **Rebaselined output included.** When fix changes recorded output (snapshots, OpenAPI, goldens, schema dumps, terraform plan baseline), updated artefact lands in same commit (see `OUTPUT-REBASELINE.md`).
 - **Meta-gate updates in same commit.** When structural rule strengthens (coverage threshold, public-API allowlist add, env-var allowlist, terraform deny-list), meta-test change lands with impl change.
 - **Update runtime task state.** Use selected adapter: `task_start` on start, `task_done` on finish. State must survive or be reconstructable after compact / session loss.
-- **Update `AUDIT.md §B` at phase boundary.** Finding table canonical.
-- **Cause stated, not symptom.** When the task fixes a bug, the `AUDIT.md §B` `fix` column (or commit body when present) names the root cause in one phrase, not the surface patch. _Symptom:_ "null check on `user.email`". _Cause:_ "OAuth refresh path drops email claim — refresh response unmarshalled from wrong field." Surface patches that don't trace to a cause require an explicit `C<n>` deferred-cause row.
+- **Update `SPEC.md §B` at phase boundary.** Finding ledger canonical. `AUDIT.md` (when present) carries optional per-finding Detail sections only.
+- **Cause stated, not symptom.** When the task fixes a bug, the `SPEC.md §B` `fix` column (or commit body when present) names the root cause in one phrase, not the surface patch. _Symptom:_ "null check on `user.email`". _Cause:_ "OAuth refresh path drops email claim — refresh response unmarshalled from wrong field." Surface patches that don't trace to a cause require an explicit `C<n>` deferred-cause row.
 - **Surgical scope.** Touch the smallest set of files that proves the behavior. Fan-out edits (>5 files for one task, or any file outside the named `§I` interfaces) require a one-line `PLAN.md` exception recorded before the edit.
 
 ## Negative — no task ever does this

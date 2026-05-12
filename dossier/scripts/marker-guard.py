@@ -107,7 +107,7 @@ def block(path: str, line: str) -> int:
                 "",
                 "Drop the marker prefix; keep the why-tail (workaround,",
                 "invariant, upstream-bug ref) if useful. Move the phase /",
-                "audit reference into AUDIT.md §B as a finding row.",
+                "audit reference into SPEC.md §B as a finding row.",
                 "",
                 "Emergency bypass: DOSSIER_MARKER_GUARD=off, with rationale",
                 "logged in AUDIT.md.",

@@ -10,7 +10,7 @@ Tiered. The minimal shape is just `SPEC.md` plus `closeout/`. Heavier flavors (m
 .scratchpad/dossier/
   SPEC.md              # compact active state: §G/§C/§I/§V/§T/§B (always)
   PLAN.md              # narrative phase plan (escalated)
-  AUDIT.md             # finding ledger with optional detail sections (escalated)
+  AUDIT.md             # optional per-finding Detail sections (escalated)
   LENS.md              # optional symlink/copy from lenses/
   closeout/
     TEMPLATE.md        # rendered for heavy flavors or --legacy
@@ -73,7 +73,7 @@ All core docs use runtime-neutral primitives. Selected runtime adapter map them 
 1. Seed `AUDIT.md`: B-ids/C-ids, severity, symptom, reproduction signal.
 1. Every planned commit: `task_start`, flip `§T` to `~`, TDD round, adjacent check, `commit_paths`, flip `§T` to `x`, `task_done`.
 1. On failed verification: run `BACKPROP.md` before retry.
-1. At phase boundary: run `DRIFT-CHECK.md`, update `AUDIT.md`, confirm `task_list` zero in-flight work, write closeout note.
+1. At phase boundary: run `DRIFT-CHECK.md`, update `SPEC.md §B` (canonical ledger), confirm `task_list` zero in-flight work, write closeout note.
 
 ## Non-negotiables
 

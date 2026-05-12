@@ -1,12 +1,16 @@
-# Audit Ledger — Phase {PHASE}
+# Audit detail — Phase {PHASE}
 
 Flavor: `{FLAVOR}`
 
-Finding ledger for this phase. The table is canonical; optional detail
-sections carry reproduction notes, hypotheses, probes, and before/after
-evidence when the table would get noisy.
+`SPEC.md §B` is the canonical finding ledger. This file is optional
+and carries only per-finding Detail sections when a finding needs
+more than a row — hypotheses, probe plans, before/after evidence.
 
-## Status legend
+If a finding fits inside `§B` (id, date, cause, fix) without losing
+information, do not create a Detail section here.
+
+## Status legend (for the `status`-style columns operators sometimes
+add inline in §B)
 
 - `.` open
 - `~` in progress / partial
@@ -14,7 +18,7 @@ evidence when the table would get noisy.
 - `x` closed
 - `d` deferred
 
-## Severity scale
+## Severity scale (used in Detail headers when relevant)
 
 - **S1** — blocks release: user-visible breakage, data loss, contracted
   invariant regression, security incident.
@@ -22,15 +26,7 @@ evidence when the table would get noisy.
 - **S3** — polish: visible drift, minor a11y, naming, log noise.
 - **S4** — nice-to-have: defer freely.
 
-## §B Findings
-
-IDs are monotonic. Use `B1`, `B2`, ... for bugs/regressions/risks and
-`C1`, `C2`, ... for capability gaps.
-
-| id | status | sev | surface | symptom / need | repro | fix | commit |
-| -- | ------ | --- | ------- | -------------- | ----- | --- | ------ |
-| B1 | . | S? | {surface} | {operator/user symptom} | {command/log/screenshot} | - | - |
-| C1 | . | S? | {surface} | {missing capability} | {acceptance signal} | - | - |
+---
 
 ## Detail — B1 {short title}
 
