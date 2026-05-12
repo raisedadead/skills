@@ -131,4 +131,31 @@ if run_close --bogus 2>/dev/null; then
 	fail "unknown flag should error"
 fi
 
+# 10. Default (no --review) prints just the create line, no review prompt.
+tmp="$(mkfix)"
+out="$(run_close --slug 'no-review' "$tmp" 2>&1)"
+grep -q '^create:' <<<"$out" || fail "default run should print 'create:' line"
+grep -q '^## Review prompt' <<<"$out" && fail "default run should not emit review prompt"
+rm -rf "$tmp"
+
+# 11. --review emits a runtime-neutral review prompt block to stdout.
+tmp="$(mkfix)"
+out="$(run_close --slug 'with-review' --review "$tmp" 2>&1)"
+grep -q '^## Review prompt' <<<"$out" || fail "--review should print review prompt header"
+grep -q 'phase 2' <<<"$out" || fail "review prompt should cite phase number"
+grep -q 'phase-2-with-review.md' <<<"$out" || fail "review prompt should cite closeout path"
+grep -q -i 'drift' <<<"$out" || fail "review prompt should name drift-check"
+grep -q -i 'covenant\|sibling test' <<<"$out" || fail "review prompt should name covenant invariants"
+grep -q -i 'read-only\|do not edit\|do not commit' <<<"$out" || fail "review prompt should constrain the evaluator to read-only"
+rm -rf "$tmp"
+
+# 12. --review-out writes the prompt to a file and does not print to stdout.
+tmp="$(mkfix)"
+review_target="$tmp/.scratchpad/dossier/REVIEW.md"
+out="$(run_close --slug 'r-out' --review-out "$review_target" "$tmp" 2>&1)"
+[[ -f "$review_target" ]] || fail "--review-out should create file"
+grep -q '^## Review prompt' "$review_target" || fail "review file should contain prompt"
+grep -q '^## Review prompt' <<<"$out" && fail "--review-out should not also print prompt to stdout"
+rm -rf "$tmp"
+
 printf 'ok\n'

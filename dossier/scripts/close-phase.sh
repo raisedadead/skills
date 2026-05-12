@@ -28,6 +28,8 @@ SLUG=""
 FORCE=0
 SINCE=""
 MAX_COMMITS=20
+REVIEW=0
+REVIEW_OUT=""
 ROOT="."
 
 while [[ $# -gt 0 ]]; do
@@ -46,6 +48,15 @@ while [[ $# -gt 0 ]]; do
 		;;
 	--max-commits)
 		MAX_COMMITS="${2:?--max-commits requires a value}"
+		shift 2
+		;;
+	--review)
+		REVIEW=1
+		shift
+		;;
+	--review-out)
+		REVIEW_OUT="${2:?--review-out requires a path}"
+		REVIEW=1
 		shift 2
 		;;
 	-h | --help)
@@ -213,3 +224,79 @@ skip { next }
 ' "$TEMPLATE" >"$TARGET"
 
 printf 'create: %s\n' "$TARGET"
+
+if [[ "$REVIEW" -eq 1 ]]; then
+	# Emit a runtime-neutral review prompt the operator can hand to a
+	# fresh evaluator (Claude Code Agent / OpenCode subagent / Codex
+	# child task). The prompt is markdown; the host runtime decides
+	# how to dispatch.
+	build_review_prompt() {
+		cat <<EOF
+## Review prompt — phase ${phase} closeout
+
+Hand this block to a **fresh, read-only** evaluator (different context
+window from the one that wrote the closeout). The reviewer must not
+edit, commit, or run mutating commands. Its job is to grade the
+phase, not to fix it.
+
+### Context to read
+
+- \`${TARGET#"$ROOT/"}\` — closeout note just rendered
+- \`.scratchpad/dossier/SPEC.md\` — canonical state, including \`§B\` ledger
+- \`.scratchpad/dossier/AUDIT.md\` if present — per-finding Detail sections
+- \`.scratchpad/dossier/LENS.md\` if present — stack gates + footguns
+- Recent commits via \`git log --oneline -${MAX_COMMITS}\`
+
+### Checks to run (all read-only)
+
+1. **drift-check** — run \`bash <skill-dir>/scripts/drift-check.sh --strict ${ROOT}\`.
+   Report exit code and any phase-marker / in-flight §T / open §B
+   findings.
+2. **Covenant invariants** — for each commit landed this phase
+   (see "Commits Landed" in the closeout):
+   - Subject matches \`type(scope): subject\` and is ≤ 50 chars.
+   - Has a sibling test, meta-gate, or recorded-output rebaseline in
+     the same commit (\`git show --stat\`).
+   - No phase / stage / audit-id markers in the diff.
+3. **§B reconciliation** — every \`B<n>\` row in SPEC §B with a
+   non-pending fix actually has a matching commit; every \`B<n>\` row
+   still pending appears in the closeout's "Deferred" section with a
+   one-line rationale.
+4. **Output contract** — the closeout's machine-derivable sections
+   (Commits Landed, Findings Closed, Deferred) match what disk says.
+   Human-judgment sections (Surface / Behavior Delta, Verification,
+   Rollout / Rollback) are filled in (no \`{placeholder}\` remaining).
+5. **User-owned ops** — closeout lists pending push / PR / publish /
+   deploy / changeset export items if applicable; never claims those
+   happened.
+
+### Report shape
+
+Reply with one block in this exact shape:
+
+\`\`\`
+phase ${phase} review — <PASS | FINDINGS>
+
+drift-check: <pass | N findings>
+covenant: <pass | N violations>
+§B reconciliation: <pass | N mismatches>
+output contract: <pass | N placeholders left>
+user-owned ops: <listed | missing>
+
+findings:
+- <one-line per gap>
+
+verdict: <ship | block | block-with-followups>
+\`\`\`
+EOF
+	}
+
+	prompt="$(build_review_prompt)"
+	if [[ -n "$REVIEW_OUT" ]]; then
+		mkdir -p "$(dirname "$REVIEW_OUT")"
+		printf '%s\n' "$prompt" >"$REVIEW_OUT"
+		printf 'review: %s\n' "$REVIEW_OUT"
+	else
+		printf '\n%s\n' "$prompt"
+	fi
+fi
